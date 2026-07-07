@@ -1,7 +1,7 @@
-import { stringifyCookie } from 'cookie'
+import { stringifySetCookie } from 'cookie'
 
 export default function handler(req, res) {
-  res.setHeader('Set-Cookie', stringifyCookie('token', '', {
+  res.setHeader('Set-Cookie', stringifySetCookie('token', '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
