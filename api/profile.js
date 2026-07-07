@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const client = await clientPromise
   const db = client.db('SewerMike')
-  const prifiles = db.collection('profiles')
+  const profiles = db.collection('profiles')
 
   if (req.method === 'GET') {
     const profile = await profiles.findOne({ user_id: userId })
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     const { username } =  req.body
-    await profiles.updatedOne(
+    await profiles.updateOne(
       { user_id: userId },
       { $set: { username } }
     )

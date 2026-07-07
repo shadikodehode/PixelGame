@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const db = client.db('SewerMike')
   const saves = db.collection('saves')
 
-  await saves.updatedOne(
+  await saves.updateOne(
     { user_id: userId },
     { $set: { save_data, updated_at: new Date() } }
   )
