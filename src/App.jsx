@@ -1,11 +1,10 @@
-import { useState } from "react"
+import Landing from "./components/Landing.jsx"
 
 function App() {
-  const [screen, setScreen] = useState("menu")
 
   return (
     <>
-      
+      <Landing />
     </>
   )
 }
