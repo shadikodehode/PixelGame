@@ -1,6 +1,7 @@
 import Login from "./Login.jsx";
 import Logout from "./Logout.jsx";
 import Signup from "./Signup.jsx";
+import SaveTest from "./SaveTest.jsx";
 
 export default function Landing() {
   return (
@@ -8,6 +9,7 @@ export default function Landing() {
       <Signup />
       <Login />
       <Logout />
+      <SaveTest />
     </>
   )
 }
