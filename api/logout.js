@@ -1,7 +1,7 @@
-import { serialize } from 'cookie'
+import { stringifyCookie } from 'cookie'
 
 export default function handler(req, res) {
-  res.setHeader('Set-Cookie', serialize('token', '', {
+  res.setHeader('Set-Cookie', stringifyCookie('token', '', {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',

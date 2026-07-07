@@ -1,7 +1,7 @@
 import clientPromise from "../lib/mongodb.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import { serialize } from "cookie"
+import { stringifyCookie } from "cookie"
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-  res.setHeader('Set-Cookie', serialize('token', token, {
+  res.setHeader('Set-Cookie', stringifyCookie('token', token, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
