@@ -19,7 +19,9 @@ export default async function handler(req, res) {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-  res.setHeader('Set-Cookie', stringifySetCookie('token', token, {
+  res.setHeader('Set-Cookie', stringifySetCookie({
+    name: 'token', 
+    value: token,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
