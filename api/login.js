@@ -1,0 +1,31 @@
+import clientPromise from "../lib/mongodb.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
+import { serialize } from "cookie"
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).end()
+
+  const { email, password } = req.body
+
+  const client = await clientPromise
+  const db = client.db('SewerMike')
+  const user = await db.collection('Users').findOne({ email })
+
+  if (!user) return res.status(401).json({ error: 'Invalid credentials' })
+  
+  const calid = await bcrypt.compare(password, user.password)
+  if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
+
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+
+  res.setHeader('Set-Cookie', serialize('token', token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60,
+  }))
+
+  res.status(200).json({ message: 'Logged in' })
+}
