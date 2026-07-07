@@ -10,11 +10,11 @@ export default async function handler(req, res) {
 
   const client = await clientPromise
   const db = client.db('SewerMike')
-  const user = await db.collection('Users').findOne({ email })
+  const user = await db.collection('users').findOne({ email })
 
   if (!user) return res.status(401).json({ error: 'Invalid credentials' })
   
-  const calid = await bcrypt.compare(password, user.password)
+  const valid = await bcrypt.compare(password, user.password)
   if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })

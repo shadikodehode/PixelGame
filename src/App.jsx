@@ -5,8 +5,7 @@ function App() {
 
   return (
     <>
-      {screen === "menu" && <MenuScreen onStart={() => setScreen("game")} />}
-      {screen === "game" && <div>Game goes here</div>}
+      
     </>
   )
 }
