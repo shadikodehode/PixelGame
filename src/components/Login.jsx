@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx" 
 
 export default function Login() {
+  const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '',})
   const [message, setMessage] = useState('')
 
@@ -15,13 +17,18 @@ export default function Login() {
       body: JSON.stringify(form),
     })
     const data = await res.json()
-    setMessage(res.ok ? 'Logged in!' : data.error)
+    if (res.ok) {
+      setMessage('Logged in')
+      login()
+    } else {
+      setMessage(data.error)
+    }
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" placeholder="Password" onChange={handleChange} type="password" />
+      <input name="email" placeholder="Email" onChange={handleChange} required/>
+      <input name="password" placeholder="Password" onChange={handleChange} type="password" required minLength={8}/>
       <button type="submit">Login</button>
       <p>{message}</p>
     </form>

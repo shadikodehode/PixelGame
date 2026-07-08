@@ -1,8 +1,6 @@
-export default function Logout() {
-  const handleLogout = async () => {
-    await fetch('/api/logout', { method: 'POST', credentials: 'include' })
-    window.location.reload()
-  }
+import { useAuth } from "../context/AuthContext.jsx"
 
-  return <button onClick={handleLogout}>Logout</button>
+export default function Logout() {
+  const { logout } = useAuth()
+  return <button onClick={logout}>Logout</button>
 }

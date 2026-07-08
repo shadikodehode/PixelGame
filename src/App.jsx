@@ -1,12 +1,7 @@
-import Landing from "./components/Landing.jsx"
+import AuthGate from "./components/AuthGate.jsx"
 
 function App() {
-
-  return (
-    <>
-      <Landing />
-    </>
-  )
+  return <AuthGate />
 }
 
 export default App
