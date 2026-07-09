@@ -17,3 +17,12 @@ export function renderTileMap(map) {
 
   return container
 }
+
+export function renderPlayer(position) {
+  const player = new Graphics()
+  player.rect(0, 0, TILE_SIZE, TILE_SIZE)
+  player.fill(0xffcc00)
+  player.x = position.x * TILE_SIZE
+  player.y = position.y * TILE_SIZE
+  return player
+}
