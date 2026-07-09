@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { useSearchParams, useNavigate } from "react-router"
+import { useNavigate, useSearchParams } from "react-router"
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams()
-  const token = params.get('token')
+  const token = searchParams.get('token')
   const navigate = useNavigate()
 
   const [password, setPassword] = useState('')

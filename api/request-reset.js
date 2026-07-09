@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   if (!email) return res.status(400).json({ error: 'Missing email' })
 
   const db = await getDb()
-  const user = await db.collection('Users').findOne({ email })
+  const user = await db.collection('users').findOne({ email })
 
   if (!user) return res.status(200).json({ message: 'If that email exists, a reset link was sent' })
 
@@ -30,13 +30,18 @@ export default async function handler(req, res) {
     )
 
     const resetUrl = `${process.env.SITE_URL}/reset-password?token=${rawToken}`
+    
 
-    await resend.emails.send({
+   const { data, error } = await resend.emails.send({
       from:'onboarding@resend.dev',
       to: email,
       subject: 'Reset your SewerMike password',
       html: `<P>Click to reset your password:</p><a href="${resetUrl}">${resetUrl}</a><p>This link expires in 30 minutes.</p>`,
     })
+
+    if(error) {
+      console.error('Resend error', error)
+    }
 
     res.status(200).json({ message: 'if that email exists, a reset link was sent' })
 }
