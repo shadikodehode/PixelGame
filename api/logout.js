@@ -1,4 +1,4 @@
-import { setTokenCookie } from '../lib/cookies'
+import { setTokenCookie } from '../lib/cookies.js'
 
 export default function handler(req, res) {
   setTokenCookie(res, '', 0)
