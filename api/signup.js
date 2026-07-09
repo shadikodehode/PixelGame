@@ -1,33 +1,22 @@
-import clientPromise from "../lib/mongodb.js";
 import bcrypt from 'bcryptjs'
+import { getDb } from "../lib/db.js";
+import { validateSignup } from "../lib/validators.js";
+import { checkRateLimit } from '../lib/rateLimit.js';
 
 export default async function handler(req, res) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
-
   if (req.method != 'POST') return res.status(405).end()
-    
+
+  const ip = req.headers['x-forwarded-for'] || 'unknown'
+    if (!(await checkRateLimit(ip))) {
+      return res.status(429).json({ error: 'Too many attempts, try again later'})
+    }
+
   const { email, username, password } = req.body
-  if (!email || !username || !password) {
-    return res.status(400).json({ error: 'Invalid Login' })
-  }
 
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ error: 'Invalid email format' })
-  }
-
-  if (username.length < 3 || username.length > 20) {
-    return res.status(400).json({ error: 'Username must be 3-20 characters' })
-  }
-
-  if (!passwordRegex.test(password)) {
-    return res.status(400).json({
-      error: 'Password must be at least 8 characters and include uppercase, lowercase and a number'
-    })
-  }
-
-  const client = await clientPromise
-  const db = client.db('SewerMike')
+  const error = validateSignup(req.body)
+  if (error) return res.status(400).json({ error })
+    
+  const db = await getDb()
   const users = db.collection('users')
 
   const existing = await users.findOne({ email })

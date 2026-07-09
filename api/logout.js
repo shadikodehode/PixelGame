@@ -1,14 +1,6 @@
-import { stringifySetCookie } from 'cookie'
+import { setTokenCookie } from '../lib/cookies'
 
 export default function handler(req, res) {
-  res.setHeader('Set-Cookie', stringifySetCookie({
-    name: 'token',
-    value: '',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 0, 
-  }))
+  setTokenCookie(res, '', 0)
   res.status(200).json({ message: 'Logged out' })
 }

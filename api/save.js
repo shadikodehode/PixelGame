@@ -1,5 +1,5 @@
-import clientPromise from "../lib/mongodb.js";
 import { verifyAuth } from "../lib/verifyAuth.js";
+import { getDb } from "../lib/db.js";
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -9,8 +9,7 @@ export default async function handler(req, res) {
 
   const { save_data } = req.body
 
-  const client = await clientPromise
-  const db = client.db('SewerMike')
+  const db = await getDb()
   const saves = db.collection('saves')
 
   await saves.updateOne(

@@ -1,4 +1,4 @@
-import clientPromise from "../lib/mongodb.js";
+import { getDb } from "../lib/db.js";
 import { verifyAuth } from "../lib/verifyAuth.js";
 
 export default async function handler(req, res) {
@@ -7,8 +7,7 @@ export default async function handler(req, res) {
   const userId = verifyAuth(req)
   if (!userId) return res.status(401).json({ error: 'Unauthorized' })
 
-  const client = await clientPromise
-  const db = client.db('SewerMike')
+  const db = await getDb()
   const saves = db.collection('saves')
 
   const save = await saves.findOne({ user_id: userId })
