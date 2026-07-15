@@ -1,57 +1,32 @@
-import { useEffect,  useRef } from "react"
-import { Application } from "pixi.js"
-import { renderTileMap, renderPlayer } from "../game/TileMapRenderer.js"
+import { useEffect,  useRef, useState } from "react"
+import { usePixiApp } from "../pixi/usePixiApp.js"
+import { buildScene } from "../game/gameScene.js"
 import { maps } from "../game/maps/index.js"
 import { usePlayerMovement } from "../hooks/usePlayerMovement.js"
+import { useGameState } from "../context/GameStateContext.jsx"
 
 export default function GameCanvas({ mapId, onEnemyContact, onExit }) {
   const canvasRef = useRef(null)
-  const appRef = useRef(null)
-  const playerSpriteRef = useRef(null)
+  const appRef = usePixiApp(canvasRef)
+  const [sceneRefs, setSceneRefs] = useState(null)
 
+  const { gameState, updateGameState } = useGameState()
   const map = maps[mapId]
-  const position = usePlayerMovement(map, onEnemyContact, onExit)
+  const position = usePlayerMovement(map, onEnemyContact, onExit, gameState.playerPosition)
 
   useEffect(() => {
-    const app = new Application()
-    let destroyed = false
-    let initialized = false
-
-    async function setup() {
-      await app.init({ background: '#1a1a1a', resizeTo: canvasRef.current })
-
-      if (destroyed) {
-        app.destroy(true, { children: true })
-        return
-      }
-
-      initialized = true
-      canvasRef.current.appendChild(app.canvas)
-      
-      const tileMapContainer = renderTileMap(map)
-      app.stage.addChild(tileMapContainer)
-
-      const playerSprite = renderPlayer(position)
-      playerSpriteRef.current = playerSprite
-      app.stage.addChild(playerSprite)
+    if (appRef.current && !sceneRefs) {
+      setSceneRefs(buildScene(appRef.current.stage, map, position))
     }
+  }, [appRef.current])
 
-    setup()
-
-    return () => {
-      destroyed = true
-      if (initialized) {
-        app.destroy(true, { children: true })
-      }
+  useEffect(() => {
+    if (sceneRefs) {
+      sceneRefs.playerSprite.x = position.x * 32
+      sceneRefs.playerSprite.y = position.y * 32
     }
-  }, [mapId])
-
-  useEffect(()  => {
-    if (playerSpriteRef.current) {
-      playerSpriteRef.current.x = position.x * 32
-      playerSpriteRef.current.y = position.y  * 32
-    }
-  }, [position])
+    updateGameState({ playerPosition: position, currentMap: mapId })
+  },  [position])
 
   return <div ref={canvasRef} style={{  width:'100%', height: '600px' }}/>
 }

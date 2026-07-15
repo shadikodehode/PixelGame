@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { TileTypes } from "../game/tileTypes";
+import { useCallback, useEffect, useState } from "react"
+import { TileTypes } from "../game/tileTypes.js"
 
-export function usePlayerMovement(map, onEnemyContact, onExit) {
-  const [position, setPosition] = useState(map.entryPoint)
+export function usePlayerMovement(map, onEnemyContact, onExit, initialPoistion) {
+  const [position, setPosition] = useState(initialPoistion ?? map.entryPoint)
 
   const tryMove = useCallback((dx, dy) => {
     setPosition((current) => {

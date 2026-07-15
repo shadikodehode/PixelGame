@@ -4,12 +4,15 @@ import { BrowserRouter } from 'react-router'
 import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { GameStateProvider } from './context/GameStateContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <GameStateProvider>
+          <App />
+        </GameStateProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
