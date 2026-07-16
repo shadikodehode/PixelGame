@@ -13,6 +13,7 @@ export default function DungeonScreen() {
     updateGameState({
       currentMap: exit.targetMap,
       playerPosition: exit.entryPoint,
+      defeatedEnemies: [],
     })
   }
 
