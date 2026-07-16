@@ -1,13 +1,16 @@
 import { useGame } from "../context/GameContext.jsx"
 import { useGameState } from "../context/GameStateContext.jsx"
 import { useHero } from "../hooks/useHero.js"
+import { commonStyles } from "../styles/commonStyles.js"
 
 export default function RestScreen() {
   const { goTo } = useGame()
   const { hero, fullHeal } = useHero() 
+  
+  const center = commonStyles.center
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`${center}`}>
       <h1>REST</h1>
       <p>HP: {hero.health} / {hero.maxHealth}</p>
       {hero.health < hero.maxHealth && (

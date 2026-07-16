@@ -4,12 +4,15 @@ import { useEffect, useState } from "react"
 import { EnemyTypes } from "../game/enemyTypes.js"
 import { useCombat } from "../hooks/useCombat.js"
 import { useHero } from "../hooks/useHero.js"
+import { commonStyles } from "../styles/commonStyles.js"
 
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
   const enemyStats = EnemyTypes[enemy.type]
   const { hero, updateHero} = useHero()
+
+  const center = commonStyles.center
 
   const handleWin = (finalPlayerHp) => {
     updateHero({ health: finalPlayerHp})
@@ -27,7 +30,7 @@ export default function BattleScreen({ enemy }) {
   )
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`${center}`}>
       <h1>BATTLE - {enemyStats.name}</h1>
       <p>You: {playerHp}  HP</p>
       <p>{enemyStats.name}: {enemyHp} HP</p>

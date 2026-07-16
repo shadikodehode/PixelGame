@@ -9,8 +9,8 @@ export default function GameCanvas({ mapId, onEnemyContact, onExit, onChestConta
   const canvasRef = useRef(null)
   const { appRef, ready } = usePixiApp(canvasRef)
   const [sceneRefs, setSceneRefs] = useState(null)
-
   const { gameState, updateGameState } = useGameState()
+
   const map = maps[mapId]
   const position = usePlayerMovement(
     map, onEnemyContact, onExit, onChestContact, 
@@ -20,8 +20,12 @@ export default function GameCanvas({ mapId, onEnemyContact, onExit, onChestConta
   useEffect(() => {
     if (!ready || !appRef.current) return
     appRef.current.stage.removeChildren()
+    const canvasSize = {
+      width: appRef.current.screen.width,
+      height: appRef.current.screen.height,
+    }
     setSceneRefs(
-      buildScene(appRef.current.stage, map, position, gameState.defeatedEnemies, gameState.openedChests)
+      buildScene(appRef.current.stage, map, position, canvasSize, gameState.defeatedEnemies, gameState.openedChests)
     )
   }, [ready, mapId])
 

@@ -1,19 +1,30 @@
 import { renderTileMap, renderPlayer, renderEnemy, renderChest } from "./TileMapRenderer.js"
+import { Container } from "pixi.js"
+import { TILE_SIZE } from "./tileTypes.js"
 
-export function buildScene(stage, map, position, defeatedEnemies = [], openedChests = []) {
+export function buildScene(stage, map, position, canvasSize, defeatedEnemies = [], openedChests = []) {
+  const sceneContainer = new Container()
+
   const tileMapContainer = renderTileMap(map)
-  stage.addChild(tileMapContainer)
+  sceneContainer.addChild(tileMapContainer)
 
   map.enemies
   .filter(e => !defeatedEnemies.includes(e.id))
-  .forEach(e => stage.addChild(renderEnemy(e)))
+  .forEach(e => sceneContainer.addChild(renderEnemy(e)))
 
   map.objects
   .filter(o => o.type === "chest" && !openedChests.includes(o.id))
-  .forEach(o => stage.addChild(renderChest(o)))
+  .forEach(o => sceneContainer.addChild(renderChest(o)))
 
   const playerSprite = renderPlayer(position)
-  stage.addChild(playerSprite)
+  sceneContainer.addChild(playerSprite)
+
+  const mapWidthPx = map.grid[0].length * TILE_SIZE
+  const mapHeightPx = map.grid.length * TILE_SIZE
+  sceneContainer.x = (canvasSize.width - mapWidthPx) / 2
+  sceneContainer.y = (canvasSize.height - mapHeightPx) /2
+
+  stage.addChild(sceneContainer)
 
   return { playerSprite }
 }

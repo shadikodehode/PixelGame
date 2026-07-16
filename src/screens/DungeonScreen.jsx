@@ -1,10 +1,13 @@
 import GameCanvas from "../components/GameCanvas.jsx"
 import { useGame } from "../context/GameContext.jsx"
 import { useGameState } from "../context/GameStateContext.jsx"
+import { commonStyles } from "../styles/commonStyles.js"
 
 export default function DungeonScreen() {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
+
+  const center = commonStyles.center
 
   const handleExit = (exit) => {
     updateGameState({
@@ -20,7 +23,7 @@ export default function DungeonScreen() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`${center}`}>
       <GameCanvas 
         mapId={gameState.currentMap}
         onEnemyContact={(enemy) => goTo("battle", { enemy })}
