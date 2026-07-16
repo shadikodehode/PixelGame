@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { TileTypes } from "../game/tileTypes.js"
 
-export function usePlayerMovement(map, onEnemyContact, onExit, initialPoistion) {
-  const [position, setPosition] = useState(initialPoistion ?? map.entryPoint)
+export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, initialPosition, openedChests = []) {
+  const [position, setPosition] = useState(initialPosition ?? map.entryPoint)
+
+  useEffect(() => {
+    setPosition(initialPosition ?? map.entryPoint)
+  }, [map.id])
 
   const tryMove = useCallback((dx, dy) => {
     setPosition((current) => {
@@ -17,6 +21,14 @@ export function usePlayerMovement(map, onEnemyContact, onExit, initialPoistion) 
         onEnemyContact(enemy)
         return current
       }
+      const chest = map.objects.find(
+        o => o.type === "chest" && o.x === next.x && o.y === next.y && !openedChests.includes(o.id)
+      )
+      if (chest) {
+        onChestContact(chest)
+        return next
+      }
+      
       const exit = map.exits.find(e => e.x === next.x && e.y === next.y)
       if (exit) {
         onExit(exit)
@@ -25,7 +37,7 @@ export function usePlayerMovement(map, onEnemyContact, onExit, initialPoistion) 
 
       return next
     })
-  }, [map, onEnemyContact, onExit])
+  }, [map, onEnemyContact, onExit, onChestContact, openedChests])
 
   useEffect(() => {
     const handleKeyDown = (e) =>  {

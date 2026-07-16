@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, useEffect, useRef } from "react"
 import { useSaveGame } from "../hooks/useSaveGame.js"
 
 const GameStateContext = createContext(null)
@@ -14,17 +14,21 @@ const defaultState = {
 
 export function GameStateProvider({ children }) {
   const { savedData, loading, saveGame } = useSaveGame()
-  const [gameState, setGameState] = useSate(defaultState)
+  const [gameState, setGameState] = useState(defaultState)
+  const hydrated = useRef(false)
 
-  useState(() => {
-    if (savedData && Object.keys(savedData).length > 0) {
-      setGameState(savedData)
+  useEffect(() => {
+    if (!loading && !hydrated.current) {
+      hydrated.current = true
+      if (savedData && Object.keys(savedData).length > 0) {
+        setGameState(savedData)
+      }
     }
-  }, [savedData])
+  }, [loading, savedData])
 
   const updateGameState = (partialUpdate) => {
-    setGameState((pref) => {
-      const next = { ...pref, ...partialUpdate }
+    setGameState((prev) => {
+      const next = { ...prev, ...partialUpdate }
       saveGame(next)
       return next
     })

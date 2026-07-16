@@ -5,20 +5,25 @@ import { maps } from "../game/maps/index.js"
 import { usePlayerMovement } from "../hooks/usePlayerMovement.js"
 import { useGameState } from "../context/GameStateContext.jsx"
 
-export default function GameCanvas({ mapId, onEnemyContact, onExit }) {
+export default function GameCanvas({ mapId, onEnemyContact, onExit, onChestContact }) {
   const canvasRef = useRef(null)
-  const appRef = usePixiApp(canvasRef)
+  const { appRef, ready } = usePixiApp(canvasRef)
   const [sceneRefs, setSceneRefs] = useState(null)
 
   const { gameState, updateGameState } = useGameState()
   const map = maps[mapId]
-  const position = usePlayerMovement(map, onEnemyContact, onExit, gameState.playerPosition)
+  const position = usePlayerMovement(
+    map, onEnemyContact, onExit, onChestContact, 
+    gameState.playerPosition, gameState.openedChests,
+  )
 
   useEffect(() => {
-    if (appRef.current && !sceneRefs) {
-      setSceneRefs(buildScene(appRef.current.stage, map, position))
-    }
-  }, [appRef.current])
+    if (!ready || !appRef.current) return
+    appRef.current.stage.removeChildren()
+    setSceneRefs(
+      buildScene(appRef.current.stage, map, position, gameState.defeatedEnemies, gameState.openedChests)
+    )
+  }, [ready, mapId])
 
   useEffect(() => {
     if (sceneRefs) {

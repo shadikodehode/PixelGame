@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Application } from "pixi.js"
 
 export function usePixiApp(canvasRef) {
   const appRef = useRef(null)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     const app = new Application()
@@ -18,15 +19,17 @@ export function usePixiApp(canvasRef) {
       initialized = true
       appRef.current = app
       canvasRef.current.appendChild(app.canvas)
+      setReady(true)
     }
 
     setup()
 
     return () => {
       destroyed = true
+      setReady(false)
       if (initialized) app.destroy(true, { children: true })
     }
   }, [canvasRef])
 
-  return appRef
+  return {  appRef, ready }
 }
