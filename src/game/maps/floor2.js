@@ -11,7 +11,7 @@ export const floor2 = {
     [W, F, F, F, F, F, F, W],
     [W, F, F, F, F, F, F, W],
     [W, F, F, F, F, F, F, W],
-    [W, F, F, F, F, F, F, E],
+    [E, F, F, F, F, F, F, W],
     [W, W, W, W, W, W, W, W],
   ],
   entryPoint:{ x: 1, y: 1 },
