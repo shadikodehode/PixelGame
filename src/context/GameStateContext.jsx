@@ -31,7 +31,13 @@ export function GameStateProvider({ children }) {
 
   const updateGameState = (partialUpdate) => {
     setGameState((prev) => {
-      const next = { ...prev, ...partialUpdate }
+      const next = { 
+        ...prev, 
+        ...partialUpdate,
+      hero: partialUpdate.hero ? { ...prev.hero, ...partialUpdate.hero } : prev.hero,
+      mapChests: partialUpdate.mapChests ? { ...prev.mapChests, ...partialUpdate.mapChests } : prev.mapChests,
+      mapEnemies: partialUpdate.mapEnemies ? { ...prev.mapEnemies, ...partialUpdate.mapEnemies} : prev.mapEnemies,
+     }
       saveGame(next)
       return next
     })

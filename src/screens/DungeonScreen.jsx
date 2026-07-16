@@ -49,16 +49,6 @@ export default function DungeonScreen() {
     })
   }
 
-const handleEnemyDefeated = (enemyId) => {
-  updateGameState({
-    defeatedEnemies: [...(gameState.defeatedEnemies || []), enemyId],
-    mapEnemies: {
-      ...gameState.mapEnemies,
-      [mapId]: (gameState.mapEnemies[mapId] || []).filter(enemy => enemy.id !== enemyId),
-    },
-  })
-}
-
   return (
     <div className={`${center}`}>
       <p>Gold: {gold} </p>
