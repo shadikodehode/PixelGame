@@ -3,22 +3,22 @@ import { useGameState } from "../context/GameStateContext.jsx"
 import { useEffect, useState } from "react"
 import { EnemyTypes } from "../game/enemyTypes.js"
 import { useCombat } from "../hooks/useCombat.js"
+import { useHero } from "../hooks/useHero.js"
 
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
   const enemyStats = EnemyTypes[enemy.type]
+  const { hero, updateHero} = useHero()
 
   const handleWin = (finalPlayerHp) => {
-    updateGameState({
-      hero: { ...gameState.hero, health: finalPlayerHp },
-      defeatedEnemies: [...gameState.defeatedEnemies, enemy.id]
-    })
+    updateHero({ health: finalPlayerHp})
+    updateGameState({ defeatedEnemies: [...gameState.defeatedEnemies, enemy.id] })
     setTimeout(() => goTo("dungeon"), 1000)
   }
 
   const handleLose = ()  => {
-    updateGameState({ hero: { ...gameState.hero, health: 0  } })
+    updateHero({ health: 0 })
     setTimeout(() => goTo("gameover"), 1000)
   }
 
