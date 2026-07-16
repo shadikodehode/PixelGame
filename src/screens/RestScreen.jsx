@@ -7,7 +7,7 @@ export default function RestScreen() {
   const { hero, fullHeal } = useHero() 
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h1>REST</h1>
       <p>HP: {hero.health} / {hero.maxHealth}</p>
       {hero.health < hero.maxHealth && (

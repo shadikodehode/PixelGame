@@ -38,9 +38,19 @@ export function useSaveGame() {
     }
   }, [])
 
+  const resetGame = useCallback(async () => {
+    const res = await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      credentials: 'include',
+      body: JSON.stringify({ save_data: {} }),
+    })
+    if (res.ok) window.location.reload()
+  }, [])
+
   useEffect(() => {
     loadGame()
   }, [loadGame])
 
-  return { savedData, loading, saveGame, loadGame }
+  return { savedData, loading, saveGame, loadGame, resetGame }
 }

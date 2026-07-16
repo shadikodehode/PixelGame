@@ -27,7 +27,7 @@ export default function BattleScreen({ enemy }) {
   )
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h1>BATTLE - {enemyStats.name}</h1>
       <p>You: {playerHp}  HP</p>
       <p>{enemyStats.name}: {enemyHp} HP</p>

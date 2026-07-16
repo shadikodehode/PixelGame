@@ -20,7 +20,7 @@ export default function DungeonScreen() {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <GameCanvas 
         mapId={gameState.currentMap}
         onEnemyContact={(enemy) => goTo("battle", { enemy })}
@@ -28,6 +28,7 @@ export default function DungeonScreen() {
         onChestContact={handleChestContact}
       />
       <button onClick={() => goTo("rest")}>Rest</button>
-    </>
+      <button onClick={() => goTo("menu")}>Menu</button>
+    </div>
   )
 }
