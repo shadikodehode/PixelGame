@@ -14,7 +14,7 @@ export default function BattleScreen({ enemy }) {
       hero: { ...gameState.hero, health: finalPlayerHp },
       defeatedEnemies: [...gameState.defeatedEnemies, enemy.id]
     })
-    setTimeout(() => goTo("gameover"), 1000)
+    setTimeout(() => goTo("dungeon"), 1000)
   }
 
   const handleLose = ()  => {
