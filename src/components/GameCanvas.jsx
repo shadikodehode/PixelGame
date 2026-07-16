@@ -14,7 +14,7 @@ export default function GameCanvas({ mapId, onEnemyContact, onExit, onChestConta
   const map = maps[mapId]
   const position = usePlayerMovement(
     map, onEnemyContact, onExit, onChestContact, 
-    gameState.playerPosition, gameState.openedChests,
+    gameState.playerPosition, gameState.openedChests, gameState.defeatedEnemies
   )
 
   useEffect(() => {

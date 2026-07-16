@@ -23,7 +23,7 @@ export default function DungeonScreen() {
     <>
       <GameCanvas 
         mapId={gameState.currentMap}
-        onEnemyContact={(enemy) => goTo("battle")}
+        onEnemyContact={(enemy) => goTo("battle", { enemy })}
         onExit={handleExit}
         onChestContact={handleChestContact}
       />

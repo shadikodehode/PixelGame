@@ -16,10 +16,10 @@ export const floor1 = {
   ],
   entryPoint:{ x: 1, y: 1 },
   enemies: [
-    { id: "goblin_1", x: 4, y: 2, type: "goblin" },
+    { type: "goblin" },
   ],
   objects: [
-    { id: "chest_1", x: 5, y: 3, type: "chest" }
+    { type: "chest" }
   ],
   exits: [
     {  x: 7,  y: 4, targetMap: "floor2", entryPoint: {  x: 1,  y: 1 }},

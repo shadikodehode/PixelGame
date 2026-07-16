@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { TileTypes } from "../game/tileTypes.js"
 
-export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, initialPosition, openedChests = []) {
+export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, initialPosition, openedChests = [], defeteadEnemies = []) {
   const [position, setPosition] = useState(initialPosition ?? map.entryPoint)
   const [pendingEvent, setPendingEvent] = useState(null)
 
@@ -17,7 +17,7 @@ export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, i
       const tile = row?.[next.x]
       if (!tile || tile === TileTypes.WALL) return current
 
-      const enemy = map.enemies.find(e => e.x === next.x && e.y === next.y)
+      const enemy = map.enemies.find(e => e.x === next.x && e.y === next.y && !defeteadEnemies.includes(e.id))
       if (enemy) {
         setPendingEvent({ type: "enemy", data: enemy })
         return current
@@ -39,7 +39,7 @@ export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, i
 
       return next
     })
-  }, [map, openedChests])
+  }, [map, openedChests, defeteadEnemies])
 
   useEffect(() => {
     if (!pendingEvent) return
