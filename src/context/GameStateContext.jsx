@@ -10,6 +10,9 @@ const defaultState = {
   inventory: [],
   defeatedEnemies: [],
   openedChests: [],
+  gold: 0,
+  mapChests: {},
+  mapEnemies: {},
 }
 
 export function GameStateProvider({ children }) {

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 import { TileTypes } from "../game/tileTypes.js"
 
-export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, initialPosition, openedChests = [], defeteadEnemies = []) {
+export function usePlayerMovement({
+  map, enemies, chests, onEnemyContact, onExit, onChestContact, 
+  initialPosition, openedChests = [], defeateddEnemies = [],
+}) {
   const [position, setPosition] = useState(initialPosition ?? map.entryPoint)
   const [pendingEvent, setPendingEvent] = useState(null)
 
@@ -17,13 +20,15 @@ export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, i
       const tile = row?.[next.x]
       if (!tile || tile === TileTypes.WALL) return current
 
-      const enemy = map.enemies.find(e => e.x === next.x && e.y === next.y && !defeteadEnemies.includes(e.id))
+      const enemy = enemies.find(
+        e => e.x === next.x && e.y === next.y && !defeateddEnemies.includes(e.id)
+      )
       if (enemy) {
         setPendingEvent({ type: "enemy", data: enemy })
         return current
       }
 
-      const chest = map.objects.find(
+      const chest = chests.find(
         o => o.type === "chest" && o.x === next.x && o.y === next.y && !openedChests.includes(o.id)
       )
       if (chest) {
@@ -31,7 +36,9 @@ export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, i
         return next
       }
       
-      const exit = map.exits.find(e => e.x === next.x && e.y === next.y)
+      const exit = map.exits.find(
+        e => e.x === next.x && e.y === next.y
+      )
       if (exit) {
         setPendingEvent({ type: "exit", data: exit })
         return current
@@ -39,7 +46,7 @@ export function usePlayerMovement(map, onEnemyContact, onExit, onChestContact, i
 
       return next
     })
-  }, [map, openedChests, defeteadEnemies])
+  }, [map, enemies, chests, openedChests, defeateddEnemies])
 
   useEffect(() => {
     if (!pendingEvent) return

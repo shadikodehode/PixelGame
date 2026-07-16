@@ -2,17 +2,17 @@ import { renderTileMap, renderPlayer, renderEnemy, renderChest } from "./TileMap
 import { Container } from "pixi.js"
 import { TILE_SIZE } from "./tileTypes.js"
 
-export function buildScene(stage, map, position, canvasSize, defeatedEnemies = [], openedChests = []) {
+export function buildScene(stage, map, position, canvasSize, enemies, chests, defeatedEnemies = [], openedChests = []) {
   const sceneContainer = new Container()
 
   const tileMapContainer = renderTileMap(map)
   sceneContainer.addChild(tileMapContainer)
 
-  map.enemies
+  enemies
   .filter(e => !defeatedEnemies.includes(e.id))
   .forEach(e => sceneContainer.addChild(renderEnemy(e)))
 
-  map.objects
+  chests
   .filter(o => o.type === "chest" && !openedChests.includes(o.id))
   .forEach(o => sceneContainer.addChild(renderChest(o)))
 

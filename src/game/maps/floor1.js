@@ -15,13 +15,9 @@ export const floor1 = {
     [W, W, W, W, W, W, W, W],
   ],
   entryPoint:{ x: 1, y: 1 },
-  enemies: [
-    { type: "goblin" },
-  ],
-  objects: [
-    { type: "chest" }
-  ],
   exits: [
     {  x: 7,  y: 4, targetMap: "floor2", entryPoint: {  x: 1,  y: 1 }},
   ],
+    enemySpawns: { pool: ["goblin"], count: 1},
+    chestCount: 1,
 }

@@ -3,5 +3,6 @@ export const ObjectTypes = {
     id: "chest",
     name: "Chest",
     sprite: "",
+    goldReward: 10,
   },
 }
