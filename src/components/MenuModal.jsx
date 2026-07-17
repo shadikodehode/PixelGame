@@ -25,13 +25,16 @@ export default function MenuModal() {
   return (
     <Modal>
       <h2 className={menuStyles.headerStyle}>Menu</h2>
+      <button onClick={closeModal}>Resume</button>
       <button onClick={() => { closeModal(); openModal("inventory") }}>Inventory</button>
       <button onClick={() =>{ closeModal(); goTo("rest") }}>Rest</button>
+
       <hr />
-      <button onClick={closeModal}>Resume</button>
+    
       <button onClick={handleSave}>Save</button>
-      <button onClick={handleQuit}>Quit</button>
       <button onClick={logout}>Logout</button>
+      <button onClick={handleQuit}>Quit</button>
+      
     </Modal>
   )
 }
