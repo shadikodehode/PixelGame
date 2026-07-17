@@ -13,7 +13,7 @@ export function useFloorEntities(mapId, map) {
         mapEnemies:{ [mapId]: enemies },
       })
     }
-  }, [mapId])
+  }, [mapId, map, gameState.mapChests, gameState.mapEnemies, updateGameState])
 
   const liveEnemies = (gameState.mapEnemies[mapId] || [])
   .filter(e => !gameState.defeatedEnemies.includes(e.id))

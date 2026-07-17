@@ -7,7 +7,7 @@ import Modal from "./Modal.jsx"
 
 export default function InventoryModal() {
   const { closeModal, openModal } = useGame()
-  const { inventory, equip, unequi, useItem } = useItems()
+  const { inventory, equip, unequip, useItem } = useItems()
   const { hero } = useHero()
   
   return (

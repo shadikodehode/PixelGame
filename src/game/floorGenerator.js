@@ -7,15 +7,18 @@ function getFloorTiles(map, exclude = []) {
       if (tile === TileTypes.FLOOR) tiles.push({ x, y })
     })
   })
-  return tiles.filter(t =>
-    !(t.x === map.entryPoint.x && t.y === map.entryPoint.y) &&
-    !exclude.some(e => e.x === t.x && e.y === t.y)
-  )
+
+  const blocked = new Set(exclude.map((tile) => `${tile.x},${tile.y}`))
+
+  return tiles.filter((tile) => {
+    const isEntry = tile.x === map.entryPoint.x && tile.y === map.entryPoint.y
+    return !isEntry && !blocked.has(`${tile.x},${tile.y}`)
+  })
 }
 
 function pickRandom(tiles, count) {
   const shuffled = [...tiles].sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, count)
+  return shuffled.slice(0, Math.min(count, shuffled.length))
 }
 
 export function generateFloorEntities(map) {

@@ -13,7 +13,7 @@ const defaultState = {
     baseDefense: 5, 
     level: 1,
     equippedWeapon: null,
-    quippedArmor: null,
+    equippedArmor: null,
    },
   inventory: [],
   defeatedEnemies: [],
@@ -52,17 +52,33 @@ export function GameStateProvider({ children }) {
     })
   }
 
-  const resetMap = (mapId) => {
+  const resetMap = (mapId = null) => {
+    const nextMapChests = { ...gameState.mapChests }
+    const nextMapEnemies = { ...gameState.mapEnemies }
+
+    if (mapId) {
+      delete nextMapChests[mapId]
+      delete nextMapEnemies[mapId]
+    } else {
+      Object.keys(nextMapChests).forEach((key) => {
+        delete nextMapChests[key]
+        delete nextMapEnemies[key]
+      })
+    }
+
     updateGameState({
-      mapChests: { ...gameState.mapChests, [mapId]: undefined},
-      mapEnemies: { ...gameState.mapEnemies, [mapId]: undefined},
-      defeatedBosses: gameState.defeatedBosses.filter(id => !id.startWith(mapId)),
-      openedChests: gameState.openedChests.filter(id => !id.startWith(mapId)),
+      currentMap: "floor1",
+      playerPosition: { x: 1, y: 1 },
+      mapChests: nextMapChests,
+      mapEnemies: nextMapEnemies,
+      defeatedBosses: [],
+      openedChests: [],
+      defeatedEnemies: [],
     })
   }
 
   return (
-    <GameStateContext.Provider value={{ gameState, updateGameState, loading }}>
+    <GameStateContext.Provider value={{ gameState, updateGameState, loading, resetMap }}>
       {children}
     </GameStateContext.Provider>
   )
