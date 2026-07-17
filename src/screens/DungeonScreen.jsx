@@ -9,7 +9,6 @@ import { useMapTransition } from "../hooks/useMapTransition.js"
 import { useFloorEntities } from "../hooks/useFloorEntities.js"
 import { rollChestLoot } from "../game/lootTable.js"
 import { useItems } from "../hooks/useItems.js"
-import CenterDiv from "../containers/CenterDiv.jsx"
 
 export default function DungeonScreen() {
   const { goTo } = useGame()
@@ -32,7 +31,7 @@ export default function DungeonScreen() {
   }
 
   return (
-    <CenterDiv>
+    <>
       <p>Gold: {gold} </p>
       <GameCanvas 
         mapId={mapId}
@@ -42,6 +41,6 @@ export default function DungeonScreen() {
         onExit={travelTo}
         onChestContact={handleChestContact}
       />
-    </CenterDiv>
+    </>
   )
 }

@@ -21,7 +21,7 @@ export function useItems() {
 
   const unequip = (slot) => {
     if(slot ==="weapon") updateHero({ equippedWeapon: null })
-    if(slot ==="armor") updateHero({ equippedarmor: null })      
+    if(slot ==="armor") updateHero({ equippedArmor: null })      
   }
 
   const removeItem = (itemId) => {
@@ -32,7 +32,7 @@ export function useItems() {
     updateGameState({ inventory: newInventory })
   }
 
-  const useItem = (itemid) => {
+  const useItem = (itemId) => {
     const item = ItemTypes[itemId]
     if (item.type !== "consumable") return
     if  (item.healAmount) heal(item.healAmount)

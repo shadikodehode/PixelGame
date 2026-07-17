@@ -7,7 +7,6 @@ import { useHero } from "../hooks/useHero.js"
 import { BossTypes } from "../game/bossTypes.js"
 import { useItems } from "../hooks/useItems.js"
 import { ItemTypes } from "../game/itemTypes.js"
-import CenterDiv from "../containers/CenterDiv.jsx"
 
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
@@ -42,7 +41,7 @@ export default function BattleScreen({ enemy }) {
   )
 
   const handleUseItem = (itemId) => {
-    const item = ItemTypes[itemid]
+    const item = ItemTypes[itemId]
     useItemInBattle(item)
     removeItem(itemId)
     setShowItems(false)
@@ -52,7 +51,7 @@ export default function BattleScreen({ enemy }) {
   const battleOver = playerHp <= 0 || enemyHp <= 0
 
   return (
-    <CenterDiv>
+    <>
       <h1>{enemy.isBoss ? "BOSS BATTLE" : "BATTLE"} - {enemyStats.name}</h1>
       <p>You: {playerHp}  HP</p>
       <p>{enemyStats.name}: {enemyHp} HP</p>
@@ -78,6 +77,6 @@ export default function BattleScreen({ enemy }) {
           <button onClick={() => setShowItems(false)}>Back</button>
         </div>
       )}
-    </CenterDiv>
+    </>
   )
 }
