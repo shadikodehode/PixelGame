@@ -5,6 +5,8 @@ export default async function handler(req, res) {
   const userId = verifyAuth(req)
   if (!userId) return res.status(401).json({ error: 'Unauthorized' })
 
+  res.setHeader('Cache-Control', 'no-store')
+
   const db = await getDb()
   const profiles = db.collection('profiles')
 
