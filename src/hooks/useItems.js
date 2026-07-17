@@ -7,14 +7,19 @@ export function useItems() {
   const { updateHero } = useHero()
 
   const addItem = (itemId) => {
-    updateGameState({ inventory:[...gameState.inventory, itemId] })
+    updateGameState({ inventory: [...gameState.inventory, itemId] })
   }
 
   const equip = (itemId) => {
     const item = ItemTypes[itemId]
     if (item.type === "weapon") updateHero({ equippedWeapon: itemId })
-      if (item.type === "armor") updateHero({ equippedArmor: itemId })
+    if (item.type === "armor") updateHero({ equippedArmor: itemId })
   }
 
-  return { inventory: gameState.inventory, addItem, equip }
+  const unequip = (slot) => {
+    if(slot ==="weapon") updateHero({ equippedWeapon: null })
+    if(slot ==="armor") updateHero({ equippedarmor: null })      
+  }
+
+  return { inventory: gameState.inventory, addItem, equip, unequip }
 }

@@ -12,16 +12,18 @@ export function useCombat(enemy, enemyStats, hero, onWin, onLose) {
   }, [playerHp, enemyHp])
 
 const attack = () => {
-  const damageToEnemy = calculateDamage(hero.strength, enemyStats.defense)
+  const { damage: damageToEnemy, isCrit: playerCrit } = calculateDamage(hero.strength, enemyStats.defense)
   const newEnemyHp = Math.max(0, enemyHp - damageToEnemy)
   setEnemyHp(newEnemyHp)
 
   if (!isDefeated(newEnemyHp)) {
-    const damageToPlayer = calculateDamage(enemyStats.strength, hero.defense)
+    const { damage: damageToPlayer, isCrit: enemyCrit } = calculateDamage(enemyStats.strength, hero.defense)
     setPlayerHp((hp) => Math.max(0, hp - damageToPlayer))
-    setLog(`You hit for ${damageToEnemy}. ${enemyStats.name} hits back for ${damageToPlayer}.`)
+    setLog(
+      `You hit for ${damageToEnemy}. ${enemyStats.name} hits back for ${damageToPlayer}.`
+    )
   } else {
-    setLog(`${enemyStats.name} defeated!`)
+    setLog(`${enemyStats.name} defeated! ${playerCrit ? "Critical hit!"  : ""}`)
   }
 }
 
