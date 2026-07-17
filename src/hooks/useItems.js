@@ -4,9 +4,12 @@ import { ItemTypes } from "../game/itemTypes.js"
 
 export function useItems() {
   const { gameState, updateGameState } = useGameState()
-  const { updateHero } = useHero()
+  const { heal, updateHero } = useHero()
 
   const addItem = (itemId) => {
+    const item = ItemTypes[itemId]
+    const alreadyOwned = item.type !== "consumable" && gameState.inventory.includes(itemId)
+    if (alreadyOwned) return
     updateGameState({ inventory: [...gameState.inventory, itemId] })
   }
 
@@ -21,5 +24,17 @@ export function useItems() {
     if(slot ==="armor") updateHero({ equippedarmor: null })      
   }
 
-  return { inventory: gameState.inventory, addItem, equip, unequip }
+  const useItem = (itemid) => {
+    const item = ItemTypes[itemId]
+    if (item.type !=="consumable") return
+    
+    if  (item.healAmount)heal(item.healAmount)
+    
+    const index = gameState.inventory.indexOf(itemId)
+    const newInventory = [...gameState.inventory]
+    newInventory.splice(index, 1)
+    updateGameState({ inventory: newInventory })
+  }
+
+  return { inventory: gameState.inventory, addItem, equip, unequip, useItem }
 }

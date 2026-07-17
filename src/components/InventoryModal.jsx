@@ -7,7 +7,7 @@ import Modal from "./Modal.jsx"
 
 export default function InventoryModal() {
   const { closeModal, openModal } = useGame()
-  const { inventory, equip, unequip } = useItems()
+  const { inventory, equip, unequi, useItem } = useItems()
   const { hero } = useHero()
   
   return (
@@ -16,7 +16,7 @@ export default function InventoryModal() {
       <p>Weapon: {hero.equippedWeapon ? ItemTypes[hero.equippedWeapon].name :"None"}
         {hero.equippedWeapon && <button onClick={() => unequip("weapon")}>Unequip</button>}
       </p>
-      <p>Armor: {hero.equippedArmor ? ItemTypes[hero.equippedArmor].name :"None"}
+      <p>Armor: {hero.equippedArmor ? ItemTypes[hero.equippedArmor].name : "None"}
         {hero.equippedArmor && <button onClick={() => unequip("armor")}>Unequip</button>}
       </p>
       {inventory.length === 0 && <p>No items yet.</p>}
@@ -29,6 +29,9 @@ export default function InventoryModal() {
             <span>{item.name} ({item.type})</span>
             {item.type !== "consumable" && !isEquipped && (
               <button onClick={() => equip(itemId)}>Equip</button>
+            )}
+            {item.type === "consumable" && (
+              <button onClick={()=> useItem(itemId)}>Use</button>
             )}
             {isEquipped && <span> (equipped)</span>}
           </div>
