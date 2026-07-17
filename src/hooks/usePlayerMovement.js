@@ -3,7 +3,7 @@ import { TileTypes } from "../game/tileTypes.js"
 
 export function usePlayerMovement({
   map, enemies, chests, onEnemyContact, onExit, onChestContact, 
-  initialPosition, openedChests = [], defeateddEnemies = [],
+  initialPosition, openedChests = [], defeatedEnemies = [],
 }) {
   const [position, setPosition] = useState(initialPosition ?? map.entryPoint)
   const [pendingEvent, setPendingEvent] = useState(null)
@@ -21,7 +21,7 @@ export function usePlayerMovement({
       if (!tile || tile === TileTypes.WALL) return current
 
       const enemy = enemies.find(
-        e => e.x === next.x && e.y === next.y && !defeateddEnemies.includes(e.id)
+        e => e.x === next.x && e.y === next.y && !defeatedEnemies.includes(e.id)
       )
       if (enemy) {
         setPendingEvent({ type: "enemy", data: enemy })
@@ -46,7 +46,7 @@ export function usePlayerMovement({
 
       return next
     })
-  }, [map, enemies, chests, openedChests, defeateddEnemies])
+  }, [map, enemies, chests, openedChests, defeatedEnemies])
 
   useEffect(() => {
     if (!pendingEvent) return

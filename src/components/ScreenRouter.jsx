@@ -4,6 +4,7 @@ import DungeonScreen from "../screens/DungeonScreen.jsx"
 import MenuScreen from "../screens/MenuScreen.jsx"
 import RestScreen from "../screens/RestScreen.jsx"
 import GameOverScreen from "../screens/GameOverScreen.jsx"
+import VictoryScreen from "../screens/VictoryScreen.jsx"
 
 const screens = {
   menu: MenuScreen,
@@ -11,6 +12,7 @@ const screens = {
   battle: BattleScreen,
   rest:  RestScreen,
   gameover: GameOverScreen,
+  victory: VictoryScreen,
 }
 
 export default function ScreenRouter() {

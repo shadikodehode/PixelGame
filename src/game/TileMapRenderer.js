@@ -23,6 +23,14 @@ export function renderPlayer(position) {
 }
 
 export function renderEnemy(enemy) {
+  if (enemy.isBoss) {
+    const square = new Graphics()
+      square.rect(0,0, TILE_SIZE, TILE_SIZE)
+      square.fill(0x9b30ff)
+      square.x = enemy.x * TILE_SIZE
+      square.y = enemy.y * TILE_SIZE
+      return square
+  }
   return renderEntity(enemy, 0xff3333)
 }
 

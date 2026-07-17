@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import GameCanvas from "../components/GameCanvas.jsx"
 import { useGame } from "../context/GameContext.jsx"
 import { useGameState } from "../context/GameStateContext.jsx"
@@ -6,41 +5,21 @@ import { useCurrency } from "../hooks/useCurrency.js"
 import { commonStyles } from "../styles/commonStyles.js"
 import { ObjectTypes } from "../game/objectTypes.js"
 import { maps } from "../game/maps/index.js"
-import { generateChests, generateEnemies } from "../game/floorGenerator.js"
+import { generateFloorEntities } from "../game/floorGenerator.js"
+import { useMapTransition } from "../hooks/useMapTransition.js"
+import { useFloorEntities } from "../hooks/useFloorEntities.js"
 
 export default function DungeonScreen() {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
   const { gold, addGold } = useCurrency()
-
-  const center = commonStyles.center
-
+  const { travelTo } = useMapTransition()
+  
   const mapId = gameState.currentMap
   const map = maps[mapId]
+  const { enemies, chests } = useFloorEntities(mapId, map)
 
-  useEffect(() => {
-    const updates = {}
-    if (!gameState.mapChests[mapId]) {
-      updates.mapChests = { ...gameState.mapChests, [mapId]: generateChests(map, map.chestCount)}
-    }
-    if (!gameState.mapEnemies[mapId]) {
-      updates.mapEnemies = { ... gameState.mapEnemies, [mapId]: generateEnemies(map, map.enemySpawns.pool, map.enemySpawns.count)}
-    }
-    if (Object.keys(updates).length > 0) updateGameState(updates)
-  }, [mapId])
-
-  const handleExit = (exit) => {
-    const targetMap = maps[exit.targetMap]
-    updateGameState({
-      currentMap: exit.targetMap,
-      playerPosition: exit.entryPoint,
-      defeatedEnemies: [],
-      mapEnemies: {
-        ...gameState.mapEnemies,
-        [exit.targetMap]: generateEnemies(targetMap, targetMap.enemySpawns.pool, targetMap.enemySpawns.count),
-      },
-    })
-  }
+  const center = commonStyles.center
 
   const handleChestContact = (chest) => {
     addGold(ObjectTypes.chest.goldReward)
@@ -54,10 +33,10 @@ export default function DungeonScreen() {
       <p>Gold: {gold} </p>
       <GameCanvas 
         mapId={mapId}
-        enemies={gameState.mapEnemies[mapId] || []}
-        chests={gameState.mapChests[mapId] || []}
+        enemies={enemies}
+        chests={chests}
         onEnemyContact={(enemy) => goTo("battle", { enemy })}
-        onExit={handleExit}
+        onExit={travelTo}
         onChestContact={handleChestContact}
       />
       <button onClick={() => goTo("rest")}>Rest</button>

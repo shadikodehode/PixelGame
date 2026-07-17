@@ -4,7 +4,7 @@ function getFloorTiles(map, exclude = []) {
   const tiles = []
   map.grid.forEach((row, y) => {
     row.forEach((tile, x) => {
-      if (tile ===TileTypes.FLOOR) tiles.push({ x, y })
+      if (tile === TileTypes.FLOOR) tiles.push({ x, y })
     })
   })
   return tiles.filter(t =>
@@ -18,20 +18,22 @@ function pickRandom(tiles, count) {
   return shuffled.slice(0, count)
 }
 
-export function generateChests(map, count) {
-  const tiles = getFloorTiles(map)
-  return pickRandom(tiles, count).map((pos, i) => ({
+export function generateFloorEntities(map) {
+  const bossTile = map.boss ? [{ x: map.boss.x, y: map.boss.y }] : []
+
+  const chestTiles = pickRandom(getFloorTiles(map, bossTile), map.chestCount)
+  const chests = chestTiles.map((pos, i) => ({
     id: `${map.id}_chest_${i}`,
     type: "chest",
     ...pos,
   }))
-}
 
-export function generateEnemies(map, pool, count) {
-  const tiles = getFloorTiles(map)
-  return  pickRandom(tiles, count).map((pos, i) => ({
+  const enemyTiles = pickRandom(getFloorTiles(map, [...bossTile, ...chestTiles]), map.enemySpawns.count)
+  const enemies = enemyTiles.map((pos, i) => ({
     id: `${map.id}_enemy_${i}`,
-    type: pool[Math.floor(Math.random() * pool.length)],
+    type: map.enemySpawns.pool[Math.floor(Math.random() * map.enemySpawns.pool.length)],
     ...pos,
   }))
+
+  return { chests, enemies }
 }

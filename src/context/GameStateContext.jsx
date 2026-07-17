@@ -6,9 +6,20 @@ const GameStateContext = createContext(null)
 const defaultState = {
   currentMap: "floor1",
   playerPosition: { x: 1, y: 1 },
-  hero: { health: 100, maxHealth: 100, strength: 10, defense: 5, level: 1 },
+  
+  hero: { 
+    health: 100, 
+    maxHealth: 100, 
+    baseStrength: 10, 
+    baseDefense: 5, 
+    level: 1,
+    equippedWeapon: null,
+    quippedArmor: null,
+   },
+
   inventory: [],
   defeatedEnemies: [],
+  defeatedBosses: [],
   openedChests: [],
   gold: 0,
   mapChests: {},
