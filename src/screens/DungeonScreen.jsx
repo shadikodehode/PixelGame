@@ -10,13 +10,14 @@ import { useMapTransition } from "../hooks/useMapTransition.js"
 import { useFloorEntities } from "../hooks/useFloorEntities.js"
 import { rollChestLoot } from "../game/lootTable.js"
 import { useItems } from "../hooks/useItems.js"
+import InventoryModal from "../components/InventoryModal.jsx"
 
 export default function DungeonScreen() {
-  const { goTo } = useGame()
+  const { goTo, activeModal, openModal, closeModal } = useGame()
   const { gameState, updateGameState } = useGameState()
   const { gold, addGold } = useCurrency()
   const { travelTo } = useMapTransition()
-  const { addItem, equip } = useItems()
+  const { addItem } = useItems()
   
   const mapId = gameState.currentMap
   const map = maps[mapId]
@@ -27,10 +28,7 @@ export default function DungeonScreen() {
   const handleChestContact = (chest) => {
     const { gold: goldFound, item } = rollChestLoot()
     addGold(goldFound)
-    if (item) {
-      addItem(item)
-      equip(item)
-    }
+    if (item) addItem(item)
     updateGameState({
       openedChests: [...gameState.openedChests, chest.id],
     })
@@ -49,6 +47,8 @@ export default function DungeonScreen() {
       />
       <button onClick={() => goTo("rest")}>Rest</button>
       <button onClick={() => goTo("menu")}>Menu</button>
+      <button onClick={() => openModal("inventory")}>Inventory</button>
+      {activeModal === "inventory" && <InventoryModal />}
     </div>
   )
 }
