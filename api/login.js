@@ -1,8 +1,8 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { getDb } from "../lib/db.js";
-import { setTokenCookie } from "../lib/cookies.js";
-import { checkRateLimit } from "../lib/rateLimit.js";
+import { getDb } from "../lib/db.js"
+import { setTokenCookie } from "../lib/cookies.js"
+import { checkRateLimit } from "../lib/rateLimit.js"
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   const valid = await bcrypt.compare(password, user.password)
   if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+  const token = jwt.sign({ userId: String(user._id) }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
   setTokenCookie(res, token, 7 * 24 * 60 * 60)
 

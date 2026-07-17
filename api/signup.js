@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
-import { getDb } from "../lib/db.js";
-import { validateSignup } from "../lib/validators.js";
-import { checkRateLimit } from '../lib/rateLimit.js';
+import { getDb } from "../lib/db.js"
+import { validateSignup } from "../lib/validators.js"
+import { checkRateLimit } from '../lib/rateLimit.js'
 
 export default async function handler(req, res) {
   if (req.method != 'POST') return res.status(405).end()
@@ -30,9 +30,10 @@ export default async function handler(req, res) {
   })
 
   const userId = result.insertedId
+  const normalizedUserId = String(userId)
 
-  await db.collection('profiles').insertOne({ user_id: userId, username })
-  await db.collection('saves').insertOne({ user_id: userId, save_data: {}, updated_at: new Date() })
+  await db.collection('profiles').insertOne({ user_id: normalizedUserId, username })
+  await db.collection('saves').insertOne({ user_id: normalizedUserId, save_data: {}, updated_at: new Date() })
 
   res.status(201).json({ message: 'User created' })
 }

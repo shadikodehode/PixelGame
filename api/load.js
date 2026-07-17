@@ -1,5 +1,5 @@
-import { getDb } from "../lib/db.js";
-import { verifyAuth } from "../lib/verifyAuth.js";
+import { getDb } from "../lib/db.js"
+import { verifyAuth } from "../lib/verifyAuth.js"
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end()
@@ -7,11 +7,12 @@ export default async function handler(req, res) {
   const userId = verifyAuth(req)
   if (!userId) return res.status(401).json({ error: 'Unauthorized' })
 
+  const normalizedUserId = String(userId)
   res.setHeader('Cache-Control', 'no-store')
 
   const db = await getDb()
   const saves = db.collection('saves')
 
-  const save = await saves.findOne({ user_id: userId })
+  const save = await saves.findOne({ user_id: normalizedUserId })
   res.status(200).json(save?.save_data ?? {})
 }

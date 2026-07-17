@@ -1,5 +1,5 @@
-import { getDb } from "../lib/db.js";
-import { verifyAuth } from "../lib/verifyAuth.js";
+import { getDb } from "../lib/db.js"
+import { verifyAuth } from "../lib/verifyAuth.js"
 
 export default async function handler(req, res) {
   const userId = verifyAuth(req)
