@@ -12,7 +12,7 @@ export function useCombat(enemy, enemyStats, hero, onWin, onLose) {
   }, [playerHp, enemyHp])
 
 const attack = () => {
-  const damageToEnemy = calculateDamage(effectiveStats(), enemyStats.defense)
+  const damageToEnemy = calculateDamage(hero.strength, enemyStats.defense)
   const newEnemyHp = Math.max(0, enemyHp - damageToEnemy)
   setEnemyHp(newEnemyHp)
 

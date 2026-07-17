@@ -10,7 +10,7 @@ export function useFloorEntities(mapId, map) {
       const { chests, enemies } = generateFloorEntities(map)
       updateGameState({
         mapChests: { [mapId]: chests },
-        mapEnemies:{ [mapId]: chests },
+        mapEnemies:{ [mapId]: enemies },
       })
     }
   }, [mapId])

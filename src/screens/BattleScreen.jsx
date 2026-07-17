@@ -10,7 +10,8 @@ import { BossTypes } from "../game/bossTypes.js"
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
-  const { hero, updateHero} = useHero()
+  const { hero, updateHero, effectiveStats } = useHero()
+  const heroStats = effectiveStats()
 
   const enemyStats = enemy.isBoss ? BossTypes[enemy.type] : EnemyTypes[enemy.type]
 
@@ -34,7 +35,7 @@ export default function BattleScreen({ enemy }) {
   }
 
   const { playerHp, enemyHp, log, attack } = useCombat(
-    enemy, enemyStats, gameState.hero, handleWin, handleLose
+    enemy, enemyStats, { health: hero.health, ...heroStats }, handleWin, handleLose
   )
 
   return (

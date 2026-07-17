@@ -8,12 +8,15 @@ import { maps } from "../game/maps/index.js"
 import { generateFloorEntities } from "../game/floorGenerator.js"
 import { useMapTransition } from "../hooks/useMapTransition.js"
 import { useFloorEntities } from "../hooks/useFloorEntities.js"
+import { rollChestLoot } from "../game/lootTable.js"
+import { useItems } from "../hooks/useItems.js"
 
 export default function DungeonScreen() {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
   const { gold, addGold } = useCurrency()
   const { travelTo } = useMapTransition()
+  const { addItem, equip } = useItems()
   
   const mapId = gameState.currentMap
   const map = maps[mapId]
@@ -22,7 +25,12 @@ export default function DungeonScreen() {
   const center = commonStyles.center
 
   const handleChestContact = (chest) => {
-    addGold(ObjectTypes.chest.goldReward)
+    const { gold: goldFound, item } = rollChestLoot()
+    addGold(goldFound)
+    if (item) {
+      addItem(item)
+      equip(item)
+    }
     updateGameState({
       openedChests: [...gameState.openedChests, chest.id],
     })
