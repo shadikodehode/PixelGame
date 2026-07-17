@@ -24,17 +24,20 @@ export function useItems() {
     if(slot ==="armor") updateHero({ equippedarmor: null })      
   }
 
-  const useItem = (itemid) => {
-    const item = ItemTypes[itemId]
-    if (item.type !=="consumable") return
-    
-    if  (item.healAmount)heal(item.healAmount)
-    
+  const removeItem = (itemId) => {
     const index = gameState.inventory.indexOf(itemId)
+    if (index === -1) return
     const newInventory = [...gameState.inventory]
     newInventory.splice(index, 1)
     updateGameState({ inventory: newInventory })
   }
 
-  return { inventory: gameState.inventory, addItem, equip, unequip, useItem }
+  const useItem = (itemid) => {
+    const item = ItemTypes[itemId]
+    if (item.type !== "consumable") return
+    if  (item.healAmount) heal(item.healAmount)
+    removeItem(itemId)
+  }
+
+  return { inventory: gameState.inventory, addItem, equip, unequip, useItem, removeItem }
 }

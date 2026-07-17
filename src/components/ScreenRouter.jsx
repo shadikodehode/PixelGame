@@ -5,6 +5,9 @@ import MenuScreen from "../screens/MenuScreen.jsx"
 import RestScreen from "../screens/RestScreen.jsx"
 import GameOverScreen from "../screens/GameOverScreen.jsx"
 import VictoryScreen from "../screens/VictoryScreen.jsx"
+import MenuModal from "./MenuModal.jsx"
+import InventoryModal from "./InventoryModal.jsx"
+import CenterDiv from "../containers/CenterDiv.jsx"
 
 const screens = {
   menu: MenuScreen,
@@ -16,7 +19,19 @@ const screens = {
 }
 
 export default function ScreenRouter() {
-  const { screen, screenData } = useGame()
+  const { screen, screenData, activeModal, openModal } = useGame()
   const CurrentScreen = screens[screen]
-  return <CurrentScreen { ...screenData } />
+
+  return (
+    <CenterDiv>
+      {screen !== "menu" && (
+        <button onClick={() => openModal("menu")} className="fixed top-2 right-2 z-50">
+          Menu
+        </button>
+      )}
+      <CurrentScreen {...screenData} />
+      {activeModal === "menu" && <MenuModal />}
+      {activeModal === "inventory" && <InventoryModal />}
+    </CenterDiv>
+  )
 }

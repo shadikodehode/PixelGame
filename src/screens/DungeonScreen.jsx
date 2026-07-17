@@ -2,7 +2,6 @@ import GameCanvas from "../components/GameCanvas.jsx"
 import { useGame } from "../context/GameContext.jsx"
 import { useGameState } from "../context/GameStateContext.jsx"
 import { useCurrency } from "../hooks/useCurrency.js"
-import { commonStyles } from "../styles/commonStyles.js"
 import { ObjectTypes } from "../game/objectTypes.js"
 import { maps } from "../game/maps/index.js"
 import { generateFloorEntities } from "../game/floorGenerator.js"
@@ -10,11 +9,10 @@ import { useMapTransition } from "../hooks/useMapTransition.js"
 import { useFloorEntities } from "../hooks/useFloorEntities.js"
 import { rollChestLoot } from "../game/lootTable.js"
 import { useItems } from "../hooks/useItems.js"
-import InventoryModal from "../components/InventoryModal.jsx"
-import MenuModal from "../components/MenuModal.jsx"
+import CenterDiv from "../containers/CenterDiv.jsx"
 
 export default function DungeonScreen() {
-  const { goTo, activeModal, openModal } = useGame()
+  const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
   const { gold, addGold } = useCurrency()
   const { travelTo } = useMapTransition()
@@ -23,8 +21,6 @@ export default function DungeonScreen() {
   const mapId = gameState.currentMap
   const map = maps[mapId]
   const { enemies, chests } = useFloorEntities(mapId, map)
-
-  const center = commonStyles.center
 
   const handleChestContact = (chest) => {
     const { gold: goldFound, item } = rollChestLoot()
@@ -36,7 +32,7 @@ export default function DungeonScreen() {
   }
 
   return (
-    <div className={`${center}`}>
+    <CenterDiv>
       <p>Gold: {gold} </p>
       <GameCanvas 
         mapId={mapId}
@@ -46,9 +42,6 @@ export default function DungeonScreen() {
         onExit={travelTo}
         onChestContact={handleChestContact}
       />
-      <button onClick={()=> openModal("menu")}>Menu</button>
-      {activeModal === "inventory" && <InventoryModal />}
-      {activeModal === "menu" && <MenuModal />}
-    </div>
+    </CenterDiv>
   )
 }
