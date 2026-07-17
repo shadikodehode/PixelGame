@@ -16,6 +16,7 @@ export default function MenuScreen() {
     <CenterDiv>
       <h1>SewerMike</h1>
       <button onClick={() => goTo("dungeon")}>Start</button>
+      <button>Reset Map</button>
       <button onClick={resetGame}>Delete save</button>
       <Logout />
     </CenterDiv>

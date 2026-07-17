@@ -52,6 +52,15 @@ export function GameStateProvider({ children }) {
     })
   }
 
+  const resetMap = (mapId) => {
+    updateGameState({
+      mapChests: { ...gameState.mapChests, [mapId]: undefined},
+      mapEnemies: { ...gameState.mapEnemies, [mapId]: undefined},
+      defeatedBosses: gameState.defeatedBosses.filter(id => !id.startWith(mapId)),
+      openedChests: gameState.openedChests.filter(id => !id.startWith(mapId)),
+    })
+  }
+
   return (
     <GameStateContext.Provider value={{ gameState, updateGameState, loading }}>
       {children}
