@@ -41,9 +41,9 @@ function pickRandom(tiles, count, rng) {
   return output.slice(0, Math.min(count, output.length))
 }
 
-export function generateFloorEntities(map) {
+export function generateFloorEntities(map, seed) {
   const bossTile = map.boss ? [{ x: map.boss.x, y: map.boss.y }] : []
-  const rng = makeRng(map.id)
+  const rng = makeRng(seed)
 
   const chestTiles = pickRandom(getFloorTiles(map, bossTile), map.chestCount, rng)
   const chests = chestTiles.map((pos, i) => ({

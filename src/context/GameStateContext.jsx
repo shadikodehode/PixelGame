@@ -39,8 +39,6 @@ export function GameStateProvider({ children }) {
         setGameState({
           ...defaultState,
           ...savedData,
-          mapChests: savedData.mapChests ?? defaultState.mapChests,
-          mapEnemies: savedData.mapEnemies ?? defaultState.mapEnemies,
           mapSeeds: savedData.mapSeeds ?? defaultState.mapSeeds,
         })
       }
@@ -76,9 +74,13 @@ export function GameStateProvider({ children }) {
         ...prev, 
         ...partialUpdate,
       hero: partialUpdate.hero ? { ...prev.hero, ...partialUpdate.hero } : prev.hero,
-      mapChests: partialUpdate.mapChests ? { ...prev.mapChests, ...partialUpdate.mapChests } : prev.mapChests,
-      mapEnemies: partialUpdate.mapEnemies ? { ...prev.mapEnemies, ...partialUpdate.mapEnemies} : prev.mapEnemies,
-      mapSeeds: partialUpdate.mapSeeds
+      mapChests: partialUpdate.hasOwnProperty('mapChests')
+        ? { ...prev.mapChests, ...partialUpdate.mapChests }
+        : prev.mapChests,
+      mapEnemies: partialUpdate.hasOwnProperty('mapEnemies')
+        ? { ...prev.mapEnemies, ...partialUpdate.mapEnemies }
+        : prev.mapEnemies,
+      mapSeeds: partialUpdate.hasOwnProperty('mapSeeds')
         ? { ...prev.mapSeeds, ...partialUpdate.mapSeeds }
         : prev.mapSeeds,
       }

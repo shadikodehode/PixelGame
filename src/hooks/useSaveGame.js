@@ -3,17 +3,29 @@ import { useCallback, useEffect, useState } from "react"
 const buildSavePayload = (state) => {
   if (!state || typeof state !== 'object') return {}
 
+  const {
+    mapChests,
+    mapEnemies,
+    ...shape
+  } = state
+
   return {
-    currentMap: state.currentMap,
-    playerPosition: state.playerPosition,
-    hero: state.hero,
-    inventory: state.inventory,
-    gold: state.gold,
-    defeatedEnemies: state.defeatedEnemies,
-    defeatedBosses: state.defeatedBosses,
-    openedChests: state.openedChests,
-    mapSeeds: state.mapSeeds,
+    currentMap: shape.currentMap,
+    playerPosition: shape.playerPosition,
+    hero: shape.hero,
+    inventory: shape.inventory,
+    gold: shape.gold,
+    defeatedEnemies: shape.defeatedEnemies,
+    defeatedBosses: shape.defeatedBosses,
+    openedChests: shape.openedChests,
+    mapSeeds: shape.mapSeeds,
   }
+}
+
+const sanitizeLoadData = (data) => {
+  if (!data || typeof data !== 'object') return {}
+  const { mapChests, mapEnemies, ...shape } = data
+  return shape
 }
 
 export function useSaveGame() {
@@ -29,8 +41,9 @@ export function useSaveGame() {
       const res = await fetch('/api/load', { credentials: 'include' })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Failed to load save')
-      setSavedData(data)
-      return data
+      const sanitized = sanitizeLoadData(data)
+      setSavedData(sanitized)
+      return sanitized
     } catch (err) {
       console.error('Load save error:', err)
       setError(err.message)
