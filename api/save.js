@@ -11,6 +11,11 @@ export default async function handler(req, res) {
   if (!userId) return res.status(401).json({ error: 'Unauthorized' })
 
   const normalizedUserId = String(userId)
+
+  if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+    return res.status(400).json({ error: 'Invalid request body' })
+  }
+
   const { save_data } = req.body
 
   if (typeof save_data !== 'object' || save_data === null || Array.isArray(save_data)) {

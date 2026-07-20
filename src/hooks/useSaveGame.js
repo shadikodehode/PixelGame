@@ -1,5 +1,21 @@
 import { useCallback, useEffect, useState } from "react"
 
+const buildSavePayload = (state) => {
+  if (!state || typeof state !== 'object') return {}
+
+  return {
+    currentMap: state.currentMap,
+    playerPosition: state.playerPosition,
+    hero: state.hero,
+    inventory: state.inventory,
+    gold: state.gold,
+    defeatedEnemies: state.defeatedEnemies,
+    defeatedBosses: state.defeatedBosses,
+    openedChests: state.openedChests,
+    mapSeeds: state.mapSeeds,
+  }
+}
+
 export function useSaveGame() {
   const [savedData, setSavedData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -28,15 +44,16 @@ export function useSaveGame() {
     setError(null)
 
     try {
+      const payload = buildSavePayload(save_data)
       const res = await fetch('/api/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ save_data }),
+        body: JSON.stringify({ save_data: payload }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Failed to save')
-      setSavedData(save_data)
+      setSavedData(payload)
       return true
     } catch (err) {
       console.error('Save game error:', err)

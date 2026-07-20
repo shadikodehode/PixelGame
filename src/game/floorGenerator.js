@@ -16,25 +16,46 @@ function getFloorTiles(map, exclude = []) {
   })
 }
 
-function pickRandom(tiles, count) {
-  const shuffled = [...tiles].sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, Math.min(count, shuffled.length))
+function makeRng(seedString) {
+  let seed = 2166136261
+  for (let i = 0; i < seedString.length; i++) {
+    seed ^= seedString.charCodeAt(i)
+    seed = Math.imul(seed, 16777619)
+  }
+  return () => {
+    seed += 0x6D2B79F5
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function pickRandom(tiles, count, rng) {
+  const output = [...tiles]
+  for (let i = output.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1))
+    const temp = output[i]
+    output[i] = output[j]
+    output[j] = temp
+  }
+  return output.slice(0, Math.min(count, output.length))
 }
 
 export function generateFloorEntities(map) {
   const bossTile = map.boss ? [{ x: map.boss.x, y: map.boss.y }] : []
+  const rng = makeRng(map.id)
 
-  const chestTiles = pickRandom(getFloorTiles(map, bossTile), map.chestCount)
+  const chestTiles = pickRandom(getFloorTiles(map, bossTile), map.chestCount, rng)
   const chests = chestTiles.map((pos, i) => ({
     id: `${map.id}_chest_${i}`,
     type: "chest",
     ...pos,
   }))
 
-  const enemyTiles = pickRandom(getFloorTiles(map, [...bossTile, ...chestTiles]), map.enemySpawns.count)
+  const enemyTiles = pickRandom(getFloorTiles(map, [...bossTile, ...chestTiles]), map.enemySpawns.count, rng)
   const enemies = enemyTiles.map((pos, i) => ({
     id: `${map.id}_enemy_${i}`,
-    type: map.enemySpawns.pool[Math.floor(Math.random() * map.enemySpawns.pool.length)],
+    type: map.enemySpawns.pool[Math.floor(rng() * map.enemySpawns.pool.length)],
     ...pos,
   }))
 

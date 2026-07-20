@@ -22,21 +22,53 @@ const defaultState = {
   gold: 0,
   mapChests: {},
   mapEnemies: {},
+  mapSeeds: {},
 }
 
 export function GameStateProvider({ children }) {
   const { savedData, loading, saveGame } = useSaveGame()
   const [gameState, setGameState] = useState(defaultState)
   const hydrated = useRef(false)
+  const saveTimerRef = useRef(null)
+  const latestSaveRef = useRef(null)
 
   useEffect(() => {
     if (!loading && !hydrated.current) {
       hydrated.current = true
       if (savedData && Object.keys(savedData).length > 0) {
-        setGameState(savedData)
+        setGameState({
+          ...defaultState,
+          ...savedData,
+          mapChests: savedData.mapChests ?? defaultState.mapChests,
+          mapEnemies: savedData.mapEnemies ?? defaultState.mapEnemies,
+          mapSeeds: savedData.mapSeeds ?? defaultState.mapSeeds,
+        })
       }
     }
   }, [loading, savedData])
+
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current)
+      }
+    }
+  }, [])
+
+  const scheduleSave = (nextState) => {
+    latestSaveRef.current = nextState
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current)
+    }
+
+    saveTimerRef.current = setTimeout(() => {
+      if (latestSaveRef.current) {
+        saveGame(latestSaveRef.current)
+        latestSaveRef.current = null
+      }
+      saveTimerRef.current = null
+    }, 1000)
+  }
 
   const updateGameState = (partialUpdate) => {
     setGameState((prev) => {
@@ -46,8 +78,12 @@ export function GameStateProvider({ children }) {
       hero: partialUpdate.hero ? { ...prev.hero, ...partialUpdate.hero } : prev.hero,
       mapChests: partialUpdate.mapChests ? { ...prev.mapChests, ...partialUpdate.mapChests } : prev.mapChests,
       mapEnemies: partialUpdate.mapEnemies ? { ...prev.mapEnemies, ...partialUpdate.mapEnemies} : prev.mapEnemies,
-     }
-      saveGame(next)
+      mapSeeds: partialUpdate.mapSeeds
+        ? { ...prev.mapSeeds, ...partialUpdate.mapSeeds }
+        : prev.mapSeeds,
+      }
+
+      scheduleSave(next)
       return next
     })
   }
@@ -71,6 +107,7 @@ export function GameStateProvider({ children }) {
       playerPosition: { x: 1, y: 1 },
       mapChests: nextMapChests,
       mapEnemies: nextMapEnemies,
+      mapSeeds: {},
       defeatedBosses: [],
       openedChests: [],
       defeatedEnemies: [],
