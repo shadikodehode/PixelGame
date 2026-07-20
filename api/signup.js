@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   const existing = await users.findOne({ email })
   if (existing) return res.status(409).json({ error: 'Email already in use' })
 
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 12)
   const result = await users.insertOne({
     email,
     password: hashedPassword,

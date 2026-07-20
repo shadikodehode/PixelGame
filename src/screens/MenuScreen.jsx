@@ -7,7 +7,7 @@ import CenterDiv from "../containers/CenterDiv.jsx"
 export default function MenuScreen() {
   const { goTo } = useGame()
   const { gameState, resetMap } = useGameState()
-  const { loading, resetGame } = useSaveGame()
+  const { loading, resetGame, error } = useSaveGame()
   
   if (loading) return (
     <CenterDiv>
@@ -17,6 +17,7 @@ export default function MenuScreen() {
   return (
     <CenterDiv>
       <h1>SewerMike</h1>
+      {error ? <p className="text-sm text-red-400 mb-4">{error}</p> : null}
       <button onClick={() => goTo("dungeon")}>Start</button>
       <button onClick={() => resetMap()}>Reset Map</button>
       <button onClick={resetGame}>Delete save</button>

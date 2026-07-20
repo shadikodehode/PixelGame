@@ -9,12 +9,12 @@ import Modal from "./Modal.jsx"
 export default function MenuModal() {
   const { closeModal, openModal, goTo } = useGame()
   const { logout } = useAuth()
-  const { saveGame } = useSaveGame()
+  const { saveGame, error } = useSaveGame()
   const { gameState } = useGameState()
 
-  const handleSave = () => {
-    saveGame(gameState)
-    closeModal()
+  const handleSave = async () => {
+    const success = await saveGame(gameState)
+    if (success) closeModal()
   }
 
   const handleQuit= () => {
@@ -30,7 +30,8 @@ export default function MenuModal() {
       <button onClick={() =>{ closeModal(); goTo("rest") }}>Rest</button>
 
       <hr />
-    
+
+      {error ? <p className="text-sm text-red-400">{error}</p> : null}
       <button onClick={handleSave}>Save</button>
       <button onClick={logout}>Logout</button>
       <button onClick={handleQuit}>Quit</button>

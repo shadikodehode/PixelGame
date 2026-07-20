@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid or expired otken'})
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(password, 12)
     await db.collection('users').updateOne(
       { _id: resetRecord.user_id },
       { $set: { password: hashedPassword }}
