@@ -14,7 +14,7 @@ export const floor4 = {
   entryPoint:{ x: 1, y: 1 },
   exits: [
     { x: 0,  y: 4, targetMap: "floor3", entryPoint: {  x: 6,  y: 4 } },
-    { x: 7,  y: 4, targetMap: "floor5", entryPoint: {  x: 6,  y: 4 } },
+    { x: 7,  y: 4, targetMap: "floor4", entryPoint: {  x: 6,  y: 4 } },
   ],
   npc: { id: "floor4_shopKeeper", x: 2, y: 2 },
   bonfire: { id: "floor4_bonfire", x: 5, y: 2 },
