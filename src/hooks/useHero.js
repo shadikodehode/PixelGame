@@ -14,7 +14,7 @@ export function useHero() {
   }
 
   const fullHeal = () => {
-    updateHero({ health: gameState.hero.MaxHealth })
+    updateHero({ health: gameState.hero.maxHealth })
   }
 
   const effectiveStats = () => {

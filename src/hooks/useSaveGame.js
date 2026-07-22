@@ -4,12 +4,6 @@ const buildSavePayload = (state) => {
   if (!state || typeof state !== 'object') return {}
   const { mapChests, mapEnemies, ...shape } = state
 
-  const {
-    mapChests,
-    mapEnemies,
-    ...shape
-  } = state
-
   return {
     currentMap: shape.currentMap,
     playerPosition: shape.playerPosition,

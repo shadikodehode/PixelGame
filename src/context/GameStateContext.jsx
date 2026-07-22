@@ -120,6 +120,16 @@ export function GameStateProvider({ children }) {
     })
   }
 
+  const startNewGame = () => {
+    if(saveTimerRef.current)  {
+      clearTimeout(saveTimerRef.current)
+      saveTimerRef.current = null
+    }
+    latestSaveRef.current = null
+    setGameState(defaultState)
+    if (isLoggedIn) saveGame(defaultState)
+  }
+
   return (
     <GameStateContext.Provider 
       value={{ 

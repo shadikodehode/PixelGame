@@ -4,11 +4,12 @@ import { useAuth } from "../context/AuthContext.jsx"
 import Logout from "../components/Logout.jsx"
 import MenuButton from "../components/MenuButton.jsx"
 import CenterDiv from "../containers/CenterDiv.jsx"
+import { useSaveGame } from "../hooks/useSaveGame.js"
 
 export default function MenuScreen() {
   const { goTo } = useGame()
-  const { gameState, resetMap } = useGameState()
-  const { loading, starNewGame, saveError, canSave } = useSaveGame()
+  const { isLoggedIn } = useAuth()
+  const { loading, startNewGame, saveError, canSave } = useGameState()
   
   if (loading) return (
     <CenterDiv>
@@ -22,7 +23,7 @@ export default function MenuScreen() {
       )
       if (!confirmed) return
     }
-    starNewGame()
+    startNewGame()
     goTo("dungeon")
   }
 
