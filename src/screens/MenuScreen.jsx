@@ -15,7 +15,7 @@ export default function MenuScreen() {
       <p>Loading save...</p>
     </CenterDiv>)
 
-  const handleNewGame= () {
+  const handleNewGame = () => {
     if (canSave) {
       const confirmed = window.confirm(
         "Starting a new game will permently overwrite your existing save. Continue?"
