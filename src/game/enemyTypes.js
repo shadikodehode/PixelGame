@@ -1,18 +1,26 @@
 export const EnemyTypes = {
-  goblin: {
-    id: "goblin",
-    name: "Goblin",
-    health: 10,
-    strength: 5,
-    defense: 1,
+  gator: {
+    id: "gator",
+    name: "Gator",
+    health: 20,
+    strength: 15,
+    defense: 4,
     sprite: "",
   },
-  slime: {
-    id: "slime",
-    name: "Slime",
-    health: 5,
-    strength: 3,
-    defense: 0,
+  snek: {
+    id: "snek",
+    name: "Snek",
+    health: 30,
+    strength: 13,
+    defense: 6,
+    sprite: "",
+  },
+  rat: {
+    id: "rat",
+    name: "Rat",
+    health: 10,
+    strength: 10,
+    defense: 2,
     sprite: "",
   },
 }

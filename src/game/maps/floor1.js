@@ -14,6 +14,6 @@ export const floor1 = {
   exits: [
     { x: 7,  y: 4, targetMap: "floor2", entryPoint: {  x: 1,  y: 4 }},
   ],
-    enemySpawns: { pool: ["goblin"], count: 1},
+    enemySpawns: { pool: ["rat"], count: 1},
     chestCount: 1,
 }

@@ -14,7 +14,7 @@ export const floor3 = {
   exits: [
     { x: 0,  y: 4, targetMap: "floor2", entryPoint: {  x: 6,  y: 4 } },
   ],
-    enemySpawns: { pool: ["goblin"], count: 1},
+    enemySpawns: { pool: ["snek", "gator"], count: 3},
     chestCount: 1,
-    boss: { id: "floor3_boss", x: 5, y: 2, type: "swampKing" },
+    boss: { id: "floor3_boss", x: 5, y: 2, type: "donatello" },
 }

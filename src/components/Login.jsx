@@ -18,8 +18,8 @@ export default function Login({ onSuccess }) {
     })
     const data = await res.json()
     if (res.ok) {
-      setMessage('Logged in')
       login()
+      onSuccess?.()
     } else {
       setMessage(data.error)
     }

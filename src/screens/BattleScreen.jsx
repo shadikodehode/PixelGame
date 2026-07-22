@@ -7,6 +7,7 @@ import { useHero } from "../hooks/useHero.js"
 import { BossTypes } from "../game/bossTypes.js"
 import { useItems } from "../hooks/useItems.js"
 import { ItemTypes } from "../game/itemTypes.js"
+import { getCombatantStats } from "../game/getCombatantStats.js"
 
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
@@ -16,13 +17,13 @@ export default function BattleScreen({ enemy }) {
   const [showItems, setShowItems] = useState(false)
 
   const heroStats = effectiveStats()
-  const enemyStats = enemy.isBoss ? BossTypes[enemy.type] : EnemyTypes[enemy.type]
+  const enemyStats = getCombatantStats(enemy)
 
   const handleWin = (finalPlayerHp) => {
     updateHero({ health: finalPlayerHp})  
     if (enemy.isBoss){
       updateGameState({ defeatedBosses: [...gameState.defeatedBosses, enemy.id] })
-      setTimeout(() => goTo(enemyStats.isFinal ? "victory" : "dungeon"), 1000)
+      setTimeout(() => goTo(enemyStats.isFinal ? "victory" : "dungeon", { bossName: enemyStats.name }), 1000)
     } else {
       updateGameState({ defeatedEnemies: [...gameState.defeatedEnemies, enemy.id] })
       setTimeout(() => goTo("dungeon"), 1000)

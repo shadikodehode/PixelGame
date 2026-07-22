@@ -15,6 +15,6 @@ export const floor2 = {
     { x: 0, y: 4, targetMap: "floor1", entryPoint: { x: 6, y: 4 } },
     { x: 7, y: 4, targetMap: "floor3", entryPoint: { x: 1, y: 4 } },
   ],
-    enemySpawns: { pool: ["goblin"], count: 2},
+    enemySpawns: { pool: ["rat", "gator"], count: 2},
     chestCount: 2,
 }

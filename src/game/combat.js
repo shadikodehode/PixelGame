@@ -1,10 +1,12 @@
 const CRIT_CHANCE = 0.15
 const CRIT_MULTIPLIER = 1.5
 const VARIANCE = 0.2
+const ARMOR_CONSTANT = 10
 export const DEFEND_REDUCTION = 0.5
 
 export function calculateDamage(attackerStrength, defenderDefense) {
-  const base = Math.max(1, attackerStrength - defenderDefense)
+  const mitigation= defenderDefense / (defenderDefense + ARMOR_CONSTANT)
+  const base = Math.max(1, attackerStrength * (1 - mitigation))
   const swing = base * VARIANCE
   const randomized = base + (Math.random() * swing * 2 - swing)
   const isCrit = Math.random() < CRIT_CHANCE

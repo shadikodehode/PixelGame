@@ -45,7 +45,7 @@ export default function MenuModal() {
       ): (
         <MenuButton onClick={handleLogin}>Login</MenuButton>
       )}
-      <MenuButton onClick={handleQuit}>Quit</MenuButton>
+      <MenuButton onClick={handleQuit}>Main Menu</MenuButton>
     </Modal>
   )
 }
