@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react"
 import { useSaveGame } from "../hooks/useSaveGame.js"
+import { useAuth } from "./AuthContext.jsx"
 
 const GameStateContext = createContext(null)
 
@@ -26,7 +27,8 @@ const defaultState = {
 }
 
 export function GameStateProvider({ children }) {
-  const { savedData, loading, saveGame } = useSaveGame()
+  const { isLoggedIn } = useAuth()
+  const { savedData, loading, error, saveGame } = useSaveGame(isLoggedIn)
   const [gameState, setGameState] = useState(defaultState)
   const hydrated = useRef(false)
   const saveTimerRef = useRef(null)
@@ -54,6 +56,8 @@ export function GameStateProvider({ children }) {
   }, [])
 
   const scheduleSave = (nextState) => {
+    if (!isLoggedIn) return
+
     latestSaveRef.current = nextState
     if (saveTimerRef.current) {
       clearTimeout(saveTimerRef.current)
@@ -117,7 +121,18 @@ export function GameStateProvider({ children }) {
   }
 
   return (
-    <GameStateContext.Provider value={{ gameState, updateGameState, loading, resetMap }}>
+    <GameStateContext.Provider 
+      value={{ 
+        gameState, 
+        updateGameState, 
+        loading, 
+        resetMap,
+        startNewGame,
+        saveGame,
+        saveError: error,
+        canSave: isLoggedIn === true,      
+      }}
+    >
       {children}
     </GameStateContext.Provider>
   )

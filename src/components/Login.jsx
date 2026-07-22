@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx" 
 
-export default function Login() {
+export default function Login({ onSuccess }) {
   const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '',})
   const [message, setMessage] = useState('')

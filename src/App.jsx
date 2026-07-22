@@ -1,4 +1,3 @@
-import AuthGate from "./components/AuthGate.jsx"
 import ResetPassword from "./components/ResetPassword.jsx"
 import ScreenRouter from "./components/ScreenRouter.jsx"
 import { GameProvider } from "./context/GameContext.jsx"
@@ -11,11 +10,9 @@ function App() {
       <Route  
         path="/"
         element={
-          <AuthGate>
           <GameProvider>
-          <ScreenRouter />
+            <ScreenRouter />
           </GameProvider>
-          </AuthGate>
         }
       />
       </Routes>
@@ -23,5 +20,3 @@ function App() {
 }
 
 export default App
-
-/* test */

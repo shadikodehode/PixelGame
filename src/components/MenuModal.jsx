@@ -1,16 +1,15 @@
 import { useGame } from "../context/GameContext.jsx"
-import { useSaveGame } from "../hooks/useSaveGame.js"
 import { useGameState } from "../context/GameStateContext.jsx"
-import { menuStyles } from "../styles/menuStyles.js"
 import { useAuth } from "../context/AuthContext.jsx"
+import { menuStyles } from "../styles/menuStyles.js"
+import MenuButton from "./MenuButton.jsx"
 import Modal from "./Modal.jsx"
 
 
 export default function MenuModal() {
   const { closeModal, openModal, goTo } = useGame()
-  const { logout } = useAuth()
-  const { saveGame, error } = useSaveGame()
-  const { gameState } = useGameState()
+  const { isLoggedIn, logout } = useAuth()
+  const { gameState, saveGame, saveError, canSave } = useGameState()
 
   const handleSave = async () => {
     const success = await saveGame(gameState)
@@ -22,20 +21,31 @@ export default function MenuModal() {
     goTo("menu")
   }
 
+  const handleLogin = () => {
+    closeModal()
+    goTo("auth")
+  }
+
   return (
     <Modal>
       <h2 className={menuStyles.headerStyle}>Menu</h2>
-      <button onClick={closeModal}>Resume</button>
-      <button onClick={() => { closeModal(); openModal("inventory") }}>Inventory</button>
-      <button onClick={() =>{ closeModal(); goTo("rest") }}>Rest</button>
+      <MenuButton onClick={closeModal}>Resume</MenuButton>
+      <MenuButton onClick={() => { closeModal(); openModal("inventory") }}>Inventory</MenuButton>
+      <MenuButton onClick={() =>{ closeModal(); goTo("rest") }}>Rest</MenuButton>
 
       <hr />
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
-      <button onClick={handleSave}>Save</button>
-      <button onClick={logout}>Logout</button>
-      <button onClick={handleQuit}>Quit</button>
-      
+      {!canSave && <p>Log in to save your progress</p>}
+      {saveError ? <p>{saveError}</p> : null}
+      <MenuButton onClick={handleSave} disabled={!canSave} title={!canSave ? "Log in to save" : undefined}>
+        Save
+      </MenuButton>
+      {isLoggedIn ? (
+        <MenuButton onClick={logout}>Logout</MenuButton>
+      ): (
+        <MenuButton onClick={handleLogin}>Login</MenuButton>
+      )}
+      <MenuButton onClick={handleQuit}>Quit</MenuButton>
     </Modal>
   )
 }

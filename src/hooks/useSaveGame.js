@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 
 const buildSavePayload = (state) => {
   if (!state || typeof state !== 'object') return {}
+  const { mapChests, mapEnemies, ...shape } = state
 
   const {
     mapChests,
@@ -28,12 +29,20 @@ const sanitizeLoadData = (data) => {
   return shape
 }
 
-export function useSaveGame() {
+export function useSaveGame(isLoggedIn) {
   const [savedData, setSavedData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   const loadGame = useCallback(async () => {
+    if (isLoggedIn === null) return null
+
+    if (!isLoggedIn) {
+      setSavedData({})
+      setError(null)
+      setLoading(false)
+      return {}
+    }
     setLoading(true)
     setError(null)
 
@@ -51,9 +60,14 @@ export function useSaveGame() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [isLoggedIn])
 
   const saveGame = useCallback(async (save_data) => {
+    if (!isLoggedIn) {
+      setError("You're not logged in - progress won't be saved")
+      return false
+    }
+
     setError(null)
 
     try {
@@ -73,30 +87,11 @@ export function useSaveGame() {
       setError(err.message)
       return false
     }
-  }, [])
-
-  const resetGame = useCallback(async () => {
-    setError(null)
-
-    try {
-      const res = await fetch('/api/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ save_data: {} }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.error || 'Failed to delete save')
-      window.location.reload()
-    } catch (err) {
-      console.error('Reset save error:', err)
-      setError(err.message)
-    }
-  }, [])
+  }, [isLoggedIn])
 
   useEffect(() => {
     loadGame()
   }, [loadGame])
 
-  return { savedData, loading, error, saveGame, loadGame, resetGame }
+  return { savedData, loading, error, saveGame, loadGame }
 }
