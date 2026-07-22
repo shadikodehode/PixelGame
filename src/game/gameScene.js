@@ -1,4 +1,4 @@
-import { renderTileMap, renderPlayer, renderEnemy, renderChest } from "./TileMapRenderer.js"
+import { renderTileMap, renderPlayer, renderEnemy, renderChest, renderNpc, renderBonfire } from "./TileMapRenderer.js"
 import { Container } from "pixi.js"
 import { TILE_SIZE } from "./tileTypes.js"
 
@@ -15,6 +15,9 @@ export function buildScene(stage, map, position, canvasSize, enemies, chests, de
   chests
   .filter(o => o.type === "chest" && !openedChests.includes(o.id))
   .forEach(o => sceneContainer.addChild(renderChest(o)))
+
+  if (map.npc) sceneContainer.addChild(renderNpc(map.npc))
+  if (map.bonfire) sceneContainer.addChild(renderBonfire(map.bonfire))
 
   const playerSprite = renderPlayer(position)
   sceneContainer.addChild(playerSprite)

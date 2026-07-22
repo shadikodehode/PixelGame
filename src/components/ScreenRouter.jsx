@@ -7,14 +7,14 @@ import MenuModal from "./MenuModal.jsx"
 import InventoryModal from "./InventoryModal.jsx"
 import CenterDiv from "../containers/CenterDiv.jsx"
 import AuthScreen from "../screens/AuthScreen.jsx"
-import ShopScreen from "../screens/shopScreen.jsx"
+import ShopModal from "./ShopModal.jsx"
+import BonfireModal from "./bonfireModal.jsx"
 
 const screens = {
   menu: MenuScreen,
   auth: AuthScreen,
   dungeon: DungeonScreen,
   battle: BattleScreen,
-  shop: ShopScreen,
   gameover: GameOverScreen,
 }
 
@@ -34,6 +34,8 @@ export default function ScreenRouter() {
       <CurrentScreen {...screenData} />
       {activeModal === "menu" && <MenuModal />}
       {activeModal === "inventory" && <InventoryModal />}
+      {activeModal === "shop" && <ShopModal />}
+      {activeModal === "bonfire"&& <BonfireModal />}
     </CenterDiv>
   )
 }

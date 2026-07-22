@@ -1,17 +1,9 @@
-import { Armor } from "./items/armor"
-import { Consumables } from "./items/consumables"
-import { Weapons } from "./items/weapons"
-import { pickWeighted } from "./weightedRandom"
+import { ItemTypes } from "./itemTypes.js"
+import { pickWeighted } from "./weightedRandom.js"
 
-const allItems = { ...Weapons, ...Armor, ...Consumables }
-
-const lootPool = Object.values(allItems).map((item) =>({
-  id: item.id,
-  weight: item.dropWeight ?? 1,
-}))
-
-export function rollLoot({ minGold  = 5, maxGold = 20, itemChance = 0.3 } = {}) {
+export function rollLoot(lootPool = [], { minGold = 5, maxGold = 20, itemChance = 0.3 } = {}) {
   const gold = Math.floor(Math.random() * (maxGold - minGold + 1)) + minGold
-  const item = Math.random() < itemChance ? pickWeighted(lootPool) : null
+  const weighted = (lootPool ?? []).map((id) => ({ id, weight: ItemTypes[id]?.dropWeight ?? 1 }))
+  const item = weighted.length && Math.random() < itemChance ? pickWeighted(weighted) : null
   return { gold, item }
 }

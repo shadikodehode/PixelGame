@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { TileTypes } from "../game/tileTypes.js"
 
 export function usePlayerMovement({
-  map, enemies, chests, onEnemyContact, onExit, onChestContact, 
+  map, enemies, chests, onEnemyContact, onExit, onChestContact, onNpcContact, onBonfireContact,
   initialPosition, openedChests = [], defeatedEnemies = [],
 }) {
   const [position, setPosition] = useState(initialPosition ?? map.entryPoint)
@@ -35,6 +35,16 @@ export function usePlayerMovement({
         setPendingEvent({ type: "chest", data: chest })
         return next
       }
+
+      if (map.npc && map.npc.x === next.x && map.npc.y === next.y) {
+        setPendingEvent({ type: "npc", data: map.npc })
+        return current
+      }
+
+      if (map.bonfire && map.bonfire.x === next.x && map.bonfire.y === next.y) {
+        setPendingEvent({ type: "bonfire", data: map.bonfire })
+        return current
+      }
       
       const exit = map.exits.find(
         e => e.x === next.x && e.y === next.y
@@ -53,8 +63,10 @@ export function usePlayerMovement({
     if (pendingEvent.type === "enemy") onEnemyContact(pendingEvent.data)
     if (pendingEvent.type === "chest") onChestContact(pendingEvent.data)
     if (pendingEvent.type === "exit") onExit(pendingEvent.data)
+    if (pendingEvent.type === "npc") onNpcContact?.(pendingEvent.data)
+    if(pendingEvent.type === "bonfire") onBonfireContact?.(pendingEvent.data)
     setPendingEvent(null)
-  }, [pendingEvent, onEnemyContact, onChestContact, onExit])
+  }, [pendingEvent, onEnemyContact, onChestContact, onExit, onNpcContact, onBonfireContact])
 
   useEffect(() => {
     const handleKeyDown = (e) =>  {

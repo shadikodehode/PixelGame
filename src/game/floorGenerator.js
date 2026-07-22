@@ -45,17 +45,19 @@ export function generateFloorEntities(map, seed) {
   const bossTile = map.boss ? [{ x: map.boss.x, y: map.boss.y }] : []
   const rng = makeRng(seed)
 
-  const chestTiles = pickRandom(getFloorTiles(map, bossTile), map.chestCount, rng)
+  const chestCount = map.chestCount ?? 0
+  const chestTiles = pickRandom(getFloorTiles(map, bossTile), chestCount, rng)
   const chests = chestTiles.map((pos, i) => ({
     id: `${map.id}_chest_${i}`,
     type: "chest",
     ...pos,
   }))
 
-  const enemyTiles = pickRandom(getFloorTiles(map, [...bossTile, ...chestTiles]), map.enemySpawns.count, rng)
+  const enemySpawns = map.enemySpawns ?? { pool: [], coount: 0 }
+  const enemyTiles = pickRandom(getFloorTiles(map, [...bossTile, ...chestTiles]), enemySpawns.count, rng)
   const enemies = enemyTiles.map((pos, i) => ({
     id: `${map.id}_enemy_${i}`,
-    type: map.enemySpawns.pool[Math.floor(rng() * map.enemySpawns.pool.length)],
+    type: map.enemySpawns.pool[Math.floor(rng() * enemySpawns.pool.length)],
     ...pos,
   }))
 

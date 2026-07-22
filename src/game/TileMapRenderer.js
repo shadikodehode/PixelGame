@@ -46,3 +46,11 @@ export function renderEntity(pos, color) {
   square.y = pos.y * TILE_SIZE
   return square
 }
+
+export function renderNpc(npc) {
+  return renderEntity(npc, 0x00ffff)
+}
+
+export function renderBonfire(bonfire) {
+  return renderEntity(bonfire, 0xff6600)
+}

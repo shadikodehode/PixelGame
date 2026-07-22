@@ -5,7 +5,7 @@ import { maps } from "../game/maps/index.js"
 import { usePlayerMovement } from "../hooks/usePlayerMovement.js"
 import { useGameState } from "../context/GameStateContext.jsx"
 
-export default function GameCanvas({ mapId, enemies, chests, onEnemyContact, onExit, onChestContact }) {
+export default function GameCanvas({ mapId, enemies, chests, onEnemyContact, onExit, onChestContact, onNpcContact, onBonfireContact }) {
   const canvasRef = useRef(null)
   const { appRef, ready } = usePixiApp(canvasRef)
   const [sceneRefs, setSceneRefs] = useState(null)
@@ -13,7 +13,7 @@ export default function GameCanvas({ mapId, enemies, chests, onEnemyContact, onE
 
   const map = maps[mapId]
   const position = usePlayerMovement({
-    map, enemies, chests, onEnemyContact, onExit, onChestContact,
+    map, enemies, chests, onEnemyContact, onExit, onChestContact, onNpcContact, onBonfireContact,
     initialPosition: gameState.playerPosition,
     openedChests: gameState.openedChests,
     defeatedEnemies: gameState.defeatedEnemies,

@@ -1,7 +1,7 @@
 import { F, W, E } from "../mapHelpers.js"
 
-export const floor3 = {
-  id: "floor3",
+export const floor5 = {
+  id: "floor5",
   grid: [
     [W, W, W, W, W, W, W, W],
     [W, F, F, F, F, F, F, W],

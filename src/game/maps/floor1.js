@@ -16,4 +16,5 @@ export const floor1 = {
   ],
   enemySpawns: { pool: ["rat"], count: 1},
   chestCount: 1,
+  lootPool: ["healthPotion", "rustySword", "leatherScraps"],
 }

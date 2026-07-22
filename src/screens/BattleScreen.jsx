@@ -1,17 +1,17 @@
 import { useGame } from "../context/GameContext.jsx"
 import { useGameState } from "../context/GameStateContext.jsx"
-import { useEffect, useState } from "react"
-import { EnemyTypes } from "../game/enemyTypes.js"
+import { useState } from "react"
 import { useCombat } from "../hooks/useCombat.js"
 import { useHero } from "../hooks/useHero.js"
-import { BossTypes } from "../game/bossTypes.js"
+import { useCurrency } from "../hooks/useCurrency.js"
+import { getCombatantStats } from "../game/getCombatantStats.js"
 import { useItems } from "../hooks/useItems.js"
 import { ItemTypes } from "../game/itemTypes.js"
-import { getCombatantStats } from "../game/getCombatantStats.js"
-import { useCurrency } from "../hooks/useCurrency.js"
 import { rollLoot } from "../game/lootTable.js"
-import { menuStyles } from "../styles/menuStyles.js"
+import { maps } from "../game/maps/index.js"
+import Modal from "../components/Modal.jsx"
 import MenuButton from "../components/MenuButton.jsx"
+import { menuStyles } from "../styles/menuStyles.js"
 
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
@@ -24,11 +24,13 @@ export default function BattleScreen({ enemy }) {
 
   const heroStats = effectiveStats()
   const enemyStats = getCombatantStats(enemy)
+  const map = maps[gameState.currentMap]
 
   const handleWin = (finalPlayerHp) => {
     updateHero({ health: finalPlayerHp})  
 
     const { gold: goldFound, item } = rollLoot(
+      map.lootPool,
       enemy.isBoss
       ? { minGold: 50, maxGold: 100, itemChance: 1 }
       : { minGold: 5, maxGold: 15,itemChance : 0.25 }
@@ -41,7 +43,7 @@ export default function BattleScreen({ enemy }) {
       if (enemyStats.isFinal) {
         setVictoryName(enemyStats.name)
       } else {
-        setTimeout(() => goTo("shop"), 1000)
+        setTimeout(() => goTo("dungeon"), 1000)
       }
     } else {
       updateGameState({ defeatedEnemies: [...gameState.defeatedEnemies, enemy.id] })
