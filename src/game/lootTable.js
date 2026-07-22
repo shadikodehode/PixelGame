@@ -10,9 +10,8 @@ const lootPool = Object.values(allItems).map((item) =>({
   weight: item.dropWeight ?? 1,
 }))
 
-export function rollChestLoot() {
-  const gold = Math.floor(Math.random() * 15) + 5
-  const itemChance= Math.random()
-  const item = itemChance < 0.3 ? pickWeighted(lootPool) : null
+export function rollLoot({ minGold  = 5, maxGold = 20, itemChance = 0.3 } = {}) {
+  const gold = Math.floor(Math.random() * (maxGold - minGold + 1)) + minGold
+  const item = Math.random() < itemChance ? pickWeighted(lootPool) : null
   return { gold, item }
 }

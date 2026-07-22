@@ -31,7 +31,6 @@ export default function MenuModal() {
       <h2 className={menuStyles.headerStyle}>Menu</h2>
       <MenuButton onClick={closeModal}>Resume</MenuButton>
       <MenuButton onClick={() => { closeModal(); openModal("inventory") }}>Inventory</MenuButton>
-      <MenuButton onClick={() =>{ closeModal(); goTo("rest") }}>Rest</MenuButton>
 
       <hr />
 

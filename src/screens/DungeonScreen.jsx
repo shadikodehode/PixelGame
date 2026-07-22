@@ -7,7 +7,7 @@ import { maps } from "../game/maps/index.js"
 import { generateFloorEntities } from "../game/floorGenerator.js"
 import { useMapTransition } from "../hooks/useMapTransition.js"
 import { useFloorEntities } from "../hooks/useFloorEntities.js"
-import { rollChestLoot } from "../game/lootTable.js"
+import { rollLoot } from "../game/lootTable.js"
 import { useItems } from "../hooks/useItems.js"
 
 export default function DungeonScreen() {
@@ -22,7 +22,7 @@ export default function DungeonScreen() {
   const { enemies, chests } = useFloorEntities(mapId, map)
 
   const handleChestContact = (chest) => {
-    const { gold: goldFound, item } = rollChestLoot()
+    const { gold: goldFound, item } = rollLoot()
     addGold(goldFound)
     if (item) addItem(item)
     updateGameState({

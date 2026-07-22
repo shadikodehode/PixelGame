@@ -2,22 +2,20 @@ import { useGame } from "../context/GameContext.jsx"
 import BattleScreen from "../screens/BattleScreen.jsx"
 import DungeonScreen from "../screens/DungeonScreen.jsx"
 import MenuScreen from "../screens/MenuScreen.jsx"
-import RestScreen from "../screens/RestScreen.jsx"
 import GameOverScreen from "../screens/GameOverScreen.jsx"
-import VictoryScreen from "../screens/VictoryScreen.jsx"
 import MenuModal from "./MenuModal.jsx"
 import InventoryModal from "./InventoryModal.jsx"
 import CenterDiv from "../containers/CenterDiv.jsx"
 import AuthScreen from "../screens/AuthScreen.jsx"
+import ShopScreen from "../screens/shopScreen.jsx"
 
 const screens = {
   menu: MenuScreen,
   auth: AuthScreen,
   dungeon: DungeonScreen,
   battle: BattleScreen,
-  rest:  RestScreen,
+  shop: ShopScreen,
   gameover: GameOverScreen,
-  victory: VictoryScreen,
 }
 
 const NO_MENU_BUTTON_SCREENS = new Set(["menu", "auth"])

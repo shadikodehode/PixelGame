@@ -6,7 +6,7 @@ export const BossTypes = {
     strength: 12,
     defense: 5,
     sprite:  "",
-    isFinal: true,
+    isFinal: false,
   },
     leonardo:  {
     id: "theLion",
@@ -15,7 +15,7 @@ export const BossTypes = {
     strength: 15,
     defense: 5,
     sprite:  "",
-    isFinal: true,
+    isFinal: false,
   },
   raphael:  {
     id: "theRaphture",

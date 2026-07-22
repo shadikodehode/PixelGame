@@ -8,22 +8,41 @@ import { BossTypes } from "../game/bossTypes.js"
 import { useItems } from "../hooks/useItems.js"
 import { ItemTypes } from "../game/itemTypes.js"
 import { getCombatantStats } from "../game/getCombatantStats.js"
+import { useCurrency } from "../hooks/useCurrency.js"
+import { rollLoot } from "../game/lootTable.js"
+import { menuStyles } from "../styles/menuStyles.js"
+import MenuButton from "../components/MenuButton.jsx"
 
 export default function BattleScreen({ enemy }) {
   const { goTo } = useGame()
   const { gameState, updateGameState } = useGameState()
   const { hero, updateHero, effectiveStats } = useHero()
-  const { inventory, removeItem } = useItems()
+  const { addGold } = useCurrency()
+  const { inventory, addItem, removeItem } = useItems()
   const [showItems, setShowItems] = useState(false)
+  const [victoryName, setVictoryName] = useState(null)
 
   const heroStats = effectiveStats()
   const enemyStats = getCombatantStats(enemy)
 
   const handleWin = (finalPlayerHp) => {
     updateHero({ health: finalPlayerHp})  
+
+    const { gold: goldFound, item } = rollLoot(
+      enemy.isBoss
+      ? { minGold: 50, maxGold: 100, itemChance: 1 }
+      : { minGold: 5, maxGold: 15,itemChance : 0.25 }
+    )
+    addGold(goldFound)
+    if (item) addItem(item)
+
     if (enemy.isBoss){
       updateGameState({ defeatedBosses: [...gameState.defeatedBosses, enemy.id] })
-      setTimeout(() => goTo(enemyStats.isFinal ? "victory" : "dungeon", { bossName: enemyStats.name }), 1000)
+      if (enemyStats.isFinal) {
+        setVictoryName(enemyStats.name)
+      } else {
+        setTimeout(() => goTo("shop"), 1000)
+      }
     } else {
       updateGameState({ defeatedEnemies: [...gameState.defeatedEnemies, enemy.id] })
       setTimeout(() => goTo("dungeon"), 1000)
@@ -54,7 +73,7 @@ export default function BattleScreen({ enemy }) {
   return (
     <>
       <h1>{enemy.isBoss ? "BOSS BATTLE" : "BATTLE"} - {enemyStats.name}</h1>
-      <p>You: {playerHp}  HP</p>
+      <p>You: {playerHp} HP</p>
       <p>{enemyStats.name}: {enemyHp} HP</p>
       <p>{log}</p>
 
@@ -77,6 +96,14 @@ export default function BattleScreen({ enemy }) {
           ))}
           <button onClick={() => setShowItems(false)}>Back</button>
         </div>
+      )}
+
+      {victoryName && (
+        <Modal>
+          <h2 className={menuStyles.headerStyle}>VICTORY</h2>
+          <p>You defeated {victoryName}!</p>
+          <MenuButton onClick={() => goTo("menu")}>Return to Menu</MenuButton>
+        </Modal>
       )}
     </>
   )
