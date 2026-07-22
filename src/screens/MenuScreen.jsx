@@ -28,12 +28,12 @@ export default function MenuScreen() {
   }
 
   return (
-    <div>
+    <CenterDiv>
       <div>
         [ Menu background art ]
       </div>
 
-      <div>
+      <div className="flex flex-col gap-4 items-center">
         <div>
           [ Logo placeholder ]
         </div>
@@ -51,6 +51,6 @@ export default function MenuScreen() {
         <MenuButton disabled title="Not applicable in a browser tab">Quit</MenuButton>
         {isLoggedIn ? <Logout /> : <MenuButton onClick={() => goTo("auth")}>Login</MenuButton>}
       </div>
-    </div>
+    </CenterDiv>
   )
 }
